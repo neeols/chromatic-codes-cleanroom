@@ -56,7 +56,7 @@ loadScripts(document, 'script');</script>
 <div class="main-grid">
 <main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript">
 <h1 id="formatting-rules-heading">Formatting rules</h1>
-<p class="av-lead">Put a formatting code before the characters you want to style. This guide explains the supported forms, which registered style each form selects, and how styles combine. It also shows how to measure and wrap formatted text without drawing it.</p><section class="av-call-guide"><h2 id="syntax-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../ChromaticText.html">ChromaticText</a>.<a href="../ChromaticText.html#compile(java.lang.String)">compile</a>(text)</code></td><td>Formatted input string</td><td>Parse the text into a reusable layout.</td></tr><tr><td><code>layout.<a href="../ChromaticText.Layout.html#width(java.util.function.ToIntFunction)">width</a>(characterWidth)</code></td><td>Function measuring one character</td><td>Measure visible glyphs using the same character widths as the renderer.</td></tr><tr><td><code><a href="../ChromaticText.Layout.html#trim(int,boolean,java.util.function.ToIntFunction)">trim</a>(width, reverse, characterWidth)</code></td><td>Width limit; direction; measuring function</td><td>Keep text within a width while retaining formatting.</td></tr><tr><td><code><a href="../ChromaticText.Layout.html#wrap(int,java.util.function.ToIntFunction)">wrap</a>(width, characterWidth)</code></td><td>Line width; measuring function</td><td>Insert line breaks using the supplied widths.</td></tr></tbody></table><p><strong>When you finish:</strong> Compiled layouts are data values and need no close call. If your addon installs custom codes, retain the returned registration receipts and close them when unloading those codes. Font-based measuring and drawing belong on the client thread.</p></section>
+<p class="av-lead">Put a formatting code before the characters you want to style. This guide explains the supported forms, which registered style each form selects, and how styles combine. It also shows how to measure and wrap formatted text without drawing it.</p>
 <div class="av-language">
 </div>
 <h2 id="forms">Code forms</h2>
@@ -143,7 +143,7 @@ Forward trimming keeps the original leading tokens and their order.</p>
 the complete configuration before applying any changes. Invalid input leaves the last valid
 settings active and preserves your file. These settings control the local appearance of text;
 they are not synchronized as server gameplay state.</p>
-<p>A host such as GTWurtzitane may explicitly take over configuration through
+<p>A host mod can manage text configuration through
 <a href="../../config/TextConfiguration.html"><code>Text<wbr>Configuration.<wbr>use<wbr>External<wbr>Configuration()</code></a>, then supply validated settings
 through the same application API. The standalone listener stops applying its own file.</p>
 
@@ -151,40 +151,66 @@ through the same application API. The standalone listener stops applying its own
 <h2 id="syntax-recipe-layout-metrics">Measure formatted text and fit it into a line</h2>
 <p>The example measures formatted text, wraps it into lines, and trims it to a chosen width. Supply a function returning each character’s ordinary width in your font. The example’s constant width of six only demonstrates the calls; Minecraft’s usual font gives different letters different widths.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
-var layout = ChromaticText.compile(&quot;&amp;[gold]ABC&quot;);
+
+var layout = ChromaticText.compile("&amp;[gold]ABC");
 float width = layout.width(character -&gt; 6);
 String clipped = layout.trim(12, false, character -&gt; 6);
 String wrapped = layout.wrap(12, character -&gt; 6);
+
 var first = layout.glyphs().getFirst();
 String visible = layout.plain();</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile(&quot;&amp;[gold]ABC&quot;)
+<pre data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile("&amp;[gold]ABC")
+
 val width = layout.width { 6 }
+
 val clipped = layout.trim(12, false) { 6 }
+
 val wrapped = layout.wrap(12) { 6 }
+
 val first = layout.glyphs().first()
+
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile(&#x27;&amp;[gold]ABC&#x27;)
+<pre data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile('&amp;[gold]ABC')
+
 def width = layout.width({ c -&gt; 6 } as java.util.function.ToIntFunction)
+
 def clipped = layout.trim(12, false, { c -&gt; 6 } as java.util.function.ToIntFunction)
+
 def wrapped = layout.wrap(12, { c -&gt; 6 } as java.util.function.ToIntFunction)
+
 def first = layout.glyphs().getFirst()
+
 def visible = layout.plain()</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile(&quot;&amp;[gold]ABC&quot;)
+<pre data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile("&amp;[gold]ABC")
+
 val width = layout.width(_ =&gt; 6)
+
 val clipped = layout.trim(12, false, _ =&gt; 6)
+
 val wrapped = layout.wrap(12, _ =&gt; 6)
+
 val first = layout.glyphs().getFirst()
+
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile(&quot;&amp;[gold]ABC&quot;);
-val width = layout.width(function(character) { return 6; });
-val clipped = layout.trim(12, false, function(character) { return 6; });
-val wrapped = layout.wrap(12, function(character) { return 6; });
+<pre data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile("&amp;[gold]ABC");
+
+val width = layout.width(function(character) {
+    return 6;
+});
+val clipped = layout.trim(12, false, function(character) {
+    return 6;
+});
+val wrapped = layout.wrap(12, function(character) {
+    return 6;
+});
 val first = layout.glyph(0);
+
 val rgb = layout.color(0);
+
 val visible = layout.plain();</code>
 </pre>
 <p>Glyphs retain complete visible Unicode text and raw UTF-16 start/end offsets. The width callback receives one UTF-16 code unit, matching the Java parser contract. Effects and bold flags affect measured advance. Continuation prefixes use the existing parser’s reconstruction rules; see the syntax guide for mixed color/effect limitations. Custom colors/outlines return -1 when absent in the ZenScript layout.</p>
@@ -193,33 +219,38 @@ val visible = layout.plain();</code>
 <h2 id="syntax-recipe-all-code-kinds">Choose how text refers to a color or effect</h2>
 <p>Choose a short character code such as <code>&amp;z</code>, a readable name such as <code>&amp;[gold]</code>, or an effect object used directly by your code. The examples register each kind. Character and named colors, effects, and outlines are separate entry categories.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — java"><code class="language-java">var color = ChromaticDefinitions.register(ChromaticDefinitions.Kind.COLOR_CHAR,
-    new ResourceLocation(&quot;my_mod&quot;, &quot;gold_char&quot;), &#x27;Z&#x27;, 0xFFCC00, null);
+    new ResourceLocation("my_mod", "gold_char"), 'Z', 0xFFCC00, null);
 var direct = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT,
-    new ResourceLocation(&quot;my_mod&quot;, &quot;direct_wave&quot;), null, null, effect);
+    new ResourceLocation("my_mod", "direct_wave"), null, null, effect);
 // Retain both receipts until unload.</code>
 </pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — kotlin"><code class="language-kotlin">val color = formattingCode(ChromaticDefinitions.Kind.COLOR_CHAR,
-    ResourceLocation(&quot;my_mod&quot;, &quot;gold_char&quot;), trigger = &#x27;Z&#x27;, rgb = 0xFFCC00)
+    ResourceLocation("my_mod", "gold_char"), trigger = 'Z', rgb = 0xFFCC00)
 val direct = formattingCode(ChromaticDefinitions.Kind.EFFECT,
-    ResourceLocation(&quot;my_mod&quot;, &quot;direct_wave&quot;), effect = effect)</code>
+    ResourceLocation("my_mod", "direct_wave"), effect = effect)</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor(&#x27;my_pack:gold_char&#x27;, &#x27;Z&#x27;, 0xFFCC00)
-text.characterEffect(&#x27;my_pack:wave_char&#x27;, &#x27;Y&#x27;, effect)
-text.characterOutline(&#x27;my_pack:outline_char&#x27;, &#x27;X&#x27;)
-text.directEffect(&#x27;my_pack:direct_wave&#x27;, effect)</code>
+<pre data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor('my_pack:gold_char', 'Z', 0xFFCC00)
+text.characterEffect('my_pack:wave_char', 'Y', effect)
+text.characterOutline('my_pack:outline_char', 'X')
+text.directEffect('my_pack:direct_wave', effect)</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions(&quot;my_mod&quot;) { text =&gt;
-  text.code(ChromaticDefinitions.Kind.COLOR_CHAR, &quot;gold_char&quot;, Char.box(&#x27;Z&#x27;), Int.box(0xFFCC00))
-  text.code(ChromaticDefinitions.Kind.EFFECT, &quot;direct_wave&quot;, null, callback = effect)
+<pre data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions("my_mod") { text =&gt;
+  text.code(ChromaticDefinitions.Kind.COLOR_CHAR,
+      "gold_char",
+      Char.box('Z'),
+      Int.box(0xFFCC00))
+  text.code(ChromaticDefinitions.Kind.EFFECT, "direct_wave", null, callback = effect)
 }</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor(&quot;my_pack:gold_char&quot;, &quot;Z&quot;, 0xFFCC00);
-Text.characterEffect(&quot;my_pack:wave_char&quot;, &quot;Y&quot;, effect);
-Text.characterOutline(&quot;my_pack:outline_char&quot;, &quot;X&quot;);
-Text.directEffect(&quot;my_pack:direct_wave&quot;, effect);</code>
+<pre data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor("my_pack:gold_char", "Z", 0xFFCC00);
+Text.characterEffect("my_pack:wave_char", "Y", effect);
+Text.characterOutline("my_pack:outline_char", "X");
+Text.directEffect("my_pack:direct_wave", effect);</code>
 </pre>
 <p>The registry’s current case-sensitivity rules apply. Character inputs must contain exactly one UTF-16 character; do not use a surrogate-pair emoji as a character trigger. Kotlin/Scala callers can also use one atomic Java editor block for dependent changes.</p>
 </div>
+<section class="av-call-guide"><h2 id="syntax-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../ChromaticText.html">ChromaticText</a>.<a href="../ChromaticText.html#compile(java.lang.String)">compile</a>(text)</code></td><td>Formatted input string</td><td>Parse the text into a reusable layout.</td></tr><tr><td><code>layout.<a href="../ChromaticText.Layout.html#width(java.util.function.ToIntFunction)">width</a>(characterWidth)</code></td><td>Function measuring one character</td><td>Measure visible glyphs using the same character widths as the renderer.</td></tr><tr><td><code><a href="../ChromaticText.Layout.html#trim(int,boolean,java.util.function.ToIntFunction)">trim</a>(width, reverse, characterWidth)</code></td><td>Width limit; direction; measuring function</td><td>Keep text within a width while retaining formatting.</td></tr><tr><td><code><a href="../ChromaticText.Layout.html#wrap(int,java.util.function.ToIntFunction)">wrap</a>(width, characterWidth)</code></td><td>Line width; measuring function</td><td>Insert line breaks using the supplied widths.</td></tr></tbody></table><p><strong>When you finish:</strong> Compiled layouts are data values and need no close call. If your addon installs custom codes, retain the returned registration receipts and close them when unloading those codes. Font-based measuring and drawing belong on the client thread.</p></section>
+
 <nav class="av-pager" aria-label="Guide navigation"><a href="start.html">Previous: Your first effect</a><a href="configuration.html">Next: Configuration in your mod</a></nav></div></main>
 </div>
 </body>

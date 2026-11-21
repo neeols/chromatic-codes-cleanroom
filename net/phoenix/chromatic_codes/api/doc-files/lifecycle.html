@@ -54,7 +54,7 @@ loadScripts(document, 'script');</script>
 <span class="skip-nav" id="skip-navbar-top"></span></nav>
 </header>
 <div class="main-grid">
-<main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript"><nav class="av-breadcrumb" aria-label="Guide navigation"><a href="start.html">Getting started</a><a href="languages.html">Language examples</a></nav><h1 id="register-text-styles-and-read-formatted-text-heading">Register text styles and read formatted text</h1><p class="av-lead">Register a color name, an animated style, and an outline together, then remove those registrations when your mod no longer needs them. Separate examples add a new kind of animation, inspect styled characters, and reuse settings without changing the original values.</p><section class="av-call-guide"><h2 id="lifecycle-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../ChromaticDefinitions.html">ChromaticDefinitions</a>.<a href="../ChromaticDefinitions.html#edit(java.util.function.Consumer)">edit</a>(editorCallback)</code></td><td>Callback describing the complete edit</td><td>Validate and apply related definition changes together; a failed edit leaves them unapplied.</td></tr><tr><td><code>editor.<a href="../ChromaticDefinitions.Editor.html#register(net.phoenix.chromatic_codes.api.ChromaticDefinitions.Kind,net.minecraft.util.ResourceLocation,java.lang.Object,java.lang.Integer,net.phoenix.chromatic_codes.api.IChromaticEffect)">register</a>(kind, id, trigger, color, effect)</code></td><td>Entry category and its data</td><td>Keep the returned registration information for later removal.</td></tr><tr><td><code><a href="../MovementScope.html">MovementScope</a>.<a href="../MovementScope.html#replace(java.util.Map,net.phoenix.chromatic_codes.api.MovementScope)">replace</a>(factories, previous)</code></td><td>Factory map; previous owned scope</td><td>Replace your effect constructors while retaining ownership of this scope.</td></tr><tr><td><code><a href="../EffectOptions.html">EffectOptions</a>.<a href="../EffectOptions.html#palette(int...)">palette</a>(...).<a href="../EffectOptions.html#option(java.lang.String,java.lang.Object)">option</a>(name, value)</code></td><td>RGB palette; option name and value</td><td>Build a reusable option description, then create a concrete effect.</td></tr></tbody></table><p><strong>When you finish:</strong> Close the cleanup object returned by the example’s install method when those styles are no longer needed. Close your MovementScope separately. Definition edits apply together; individual movement registrations do not acquire the same all-or-nothing behavior automatically.</p></section><p>A formatting name such as <code>gold</code> tells the text parser which style to use. An effect type such as <code>example/spark</code> tells the library how to construct an effect from colors and settings. Registering one does not register the other. Keep the returned cleanup objects for both if your script adds both; close them when those registrations are no longer needed.</p><p>Java, Kotlin, GroovyScript and native Scala 3 call the same common Java API. CraftTweaker exposes registered ZenScript wrappers. Rendering remains client-only; parsing, authoring, inspection and registry edits do not require a font renderer or graphics context.</p><div class="av-example-group" data-example="chromatic-lifecycle-batches"><h2 id="chromatic-lifecycle-batches">Register related text styles and remove them together</h2><p>This registers related color, effect, and outline entries in one update. Call it during initialization or while handling one script reload at a time. Readers see the previous definitions until every new entry passes validation. If any entry fails, none of these registration changes apply.</p>
+<main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript"><nav class="av-breadcrumb" aria-label="Guide navigation"><a href="start.html">Getting started</a><a href="languages.html">Language examples</a></nav><h1 id="register-text-styles-and-read-formatted-text-heading">Register text styles and read formatted text</h1><p class="av-lead">Register a color name, an animated style, and an outline together, then remove those registrations when your mod no longer needs them. Separate examples add a new kind of animation, inspect styled characters, and reuse settings without changing the original values.</p><p>A formatting name such as <code>gold</code> tells the text parser which style to use. An effect type such as <code>example/spark</code> tells the library how to construct an effect from colors and settings. Registering one does not register the other. Keep the returned cleanup objects for both if your script adds both; close them when those registrations are no longer needed.</p><p>Java, Kotlin, GroovyScript and native Scala 3 call the same common Java API. CraftTweaker exposes registered ZenScript wrappers. Rendering remains client-only; parsing, authoring, inspection and registry edits do not require a font renderer or graphics context.</p><div class="av-example-group" data-example="chromatic-lifecycle-batches"><h2 id="chromatic-lifecycle-batches">Register related text styles and remove them together</h2><p>This registers related color, effect, and outline entries in one update. Call it during initialization or while handling one script reload at a time. Readers see the previous definitions until every new entry passes validation. If any entry fails, none of these registration changes apply.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Register related text styles and remove them together — java"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.util.ResourceLocation;
@@ -65,20 +65,25 @@ final class DefinitionBatchRecipe {
     // Common initialization. Draft validation happens before one complete snapshot is published.
     static AutoCloseable install() {
         var effect = new EffectBuilder().color((original, x, y) -&gt; 0xFFCC00).build();
+
         var added = new ArrayList&lt;ChromaticDefinitions.Registration&gt;();
+
         ChromaticDefinitions.edit(editor -&gt; {
             added.add(editor.register(ChromaticDefinitions.Kind.COLOR_NAME,
-                    new ResourceLocation(&quot;example:gold&quot;), &quot;gold&quot;, 0xFFCC00, null));
+                    new ResourceLocation("example:gold"), "gold", 0xFFCC00, null));
             added.add(editor.register(ChromaticDefinitions.Kind.EFFECT_NAME,
-                    new ResourceLocation(&quot;example:glow&quot;), &quot;glow&quot;, null, effect));
+                    new ResourceLocation("example:glow"), "glow", null, effect));
             added.add(editor.register(ChromaticDefinitions.Kind.OUTLINE_NAME,
-                    new ResourceLocation(&quot;example:edge&quot;), &quot;edge&quot;, null, null));
+                    new ResourceLocation("example:edge"), "edge", null, null));
         });
+
         var owned = List.copyOf(added);
+
         // Common teardown: remove exact identities together; stale and repeated cleanup are harmless.
         return () -&gt; ChromaticDefinitions.edit(editor -&gt; owned.forEach(receipt -&gt; editor.remove(receipt.binding())));
     }
-    // Retain install()&#x27;s handle until your contribution unloads. If install throws, retain the old handle.
+
+    // Retain install()'s handle until your contribution unloads. If install throws, retain the old handle.
 }</code></pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Register related text styles and remove them together — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
 import net.phoenix.chromatic_codes.api.*
@@ -87,29 +92,40 @@ object DefinitionBatchRecipeK {
     // Common initialization: explicit Java editor calls keep all categories in one atomic publication.
     fun install(): AutoCloseable {
         val effect = customEffect { color { _, _, _ -&gt; 0xFFCC00 } }
+
         val added = mutableListOf&lt;ChromaticDefinitions.Registration&gt;()
+
         ChromaticDefinitions.edit { editor -&gt;
             added += editor.register(ChromaticDefinitions.Kind.COLOR_NAME,
-                ResourceLocation(&quot;example:gold&quot;), &quot;gold&quot;, 0xFFCC00, null)
+                ResourceLocation("example:gold"), "gold", 0xFFCC00, null)
             added += editor.register(ChromaticDefinitions.Kind.EFFECT_NAME,
-                ResourceLocation(&quot;example:glow&quot;), &quot;glow&quot;, null, effect)
+                ResourceLocation("example:glow"), "glow", null, effect)
             added += editor.register(ChromaticDefinitions.Kind.OUTLINE_NAME,
-                ResourceLocation(&quot;example:edge&quot;), &quot;edge&quot;, null, null)
+                ResourceLocation("example:edge"), "edge", null, null)
         }
+
         val owned = added.toList()
+
         // Common teardown, called later. Closing an older handle cannot delete a replacement.
-        return AutoCloseable { ChromaticDefinitions.edit { editor -&gt; owned.forEach { editor.remove(it.binding()) } } }
+        return AutoCloseable {
+            ChromaticDefinitions.edit {
+                editor -&gt; owned.forEach {
+                    editor.remove(it.binding())
+                }
+            }
+        }
     }
+
     // Keep the returned handle. Catch rejected installation at your reload boundary and retain the old one.
 }</code></pre>
 <pre data-language="groovy" tabindex="0" role="region" aria-label="Register related text styles and remove them together — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.EffectBuilder
 
 // Common reloadable GroovyScript declaration. The loader publishes this complete draft after script loading.
 def text = mods.chromatic_codes.text
-text.color(&#x27;example:gold&#x27;, &#x27;gold&#x27;, 0xFFCC00)
-text.namedEffect(&#x27;example:glow&#x27;, &#x27;glow&#x27;,
+text.color('example:gold', 'gold', 0xFFCC00)
+text.namedEffect('example:glow', 'glow',
     new EffectBuilder().color({ original, x, y -&gt; 0xFFCC00 }).build())
-text.outline(&#x27;example:edge&#x27;, &#x27;edge&#x27;)
+text.outline('example:edge', 'edge')
 
 // Teardown/replacement is loader-owned. A successful empty reload removes these exact bindings.
 // A rejected text operation retains the last valid contribution; it does not publish half the draft.</code></pre>
@@ -117,32 +133,49 @@ text.outline(&#x27;example:edge&#x27;, &#x27;edge&#x27;)
 
 object DefinitionBatchRecipeS:
   // Common initialization. The Scala receiver stages calls through the real Java editor.
-  def install(): AutoCloseable = definitions(&quot;example&quot;) { draft =&gt;
-    draft.color(&quot;gold&quot;, 0xFFCC00)
-    draft.effect(&quot;glow&quot;, customEffect(builder =&gt; builder.color((original, x, y) =&gt; 0xFFCC00)))
-    draft.outline(&quot;edge&quot;)
+  def install(): AutoCloseable = definitions("example") { draft =&gt;
+    draft.color("gold", 0xFFCC00)
+    draft.effect("glow",
+        customEffect(builder =&gt; builder.color((original,
+        x,
+        y) =&gt; 0xFFCC00)))
+    draft.outline("edge")
   }
+
   // Retain the returned scope. Common teardown closes it later; rejected drafts preserve the old snapshot.
   def unload(owned: AutoCloseable): Unit = owned.close()</code></pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Register related text styles and remove them together — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 import mods.chromaticcodes.DefinitionReceipt;
 
 // Common startup: all seven supported categories may be staged in this one draft.
-val effect = Text.customEffect().color(function(original, x, y) { return 0xFFCC00; }).build();
+val effect = Text.customEffect()
+    .color(function(original,
+    x,
+    y) {
+    return 0xFFCC00;
+})
+    .build();
+
 val draft = Text.batch()
-    .color(&quot;example:gold&quot;, &quot;gold&quot;, 0xFFCC00)
-    .characterColor(&quot;example:char_gold&quot;, &quot;G&quot;, 0xFFCC00)
-    .namedEffect(&quot;example:glow&quot;, &quot;glow&quot;, effect)
-    .characterEffect(&quot;example:char_glow&quot;, &quot;J&quot;, effect)
-    .directEffect(&quot;example:direct_glow&quot;, effect)
-    .outline(&quot;example:edge&quot;, &quot;edge&quot;)
-    .characterOutline(&quot;example:char_edge&quot;, &quot;Q&quot;);
+    .color("example:gold", "gold", 0xFFCC00)
+    .characterColor("example:char_gold", "G", 0xFFCC00)
+    .namedEffect("example:glow", "glow", effect)
+    .characterEffect("example:char_glow", "J", effect)
+    .directEffect("example:direct_glow", effect)
+    .outline("example:edge", "edge")
+    .characterOutline("example:char_edge", "Q");
 val owned = draft.commit(); // This consumes the draft, even if final validation fails.
 
 // Common replacement: validation failure keeps the previous snapshot and its ownership intact.
 function replace(previous as DefinitionReceipt) as DefinitionReceipt {
-    return Text.batch().replace(previous).color(&quot;example:gold&quot;, &quot;gold&quot;, 0xFFD040).commit();
+    return Text.batch()
+        .replace(previous)
+        .color("example:gold",
+        "gold",
+        0xFFD040)
+        .commit();
 }
+
 // Later teardown calls owned.close(). Its state/failure properties retain publication outcome.
 // Closing the older receipt after replacement preserves the replacement.</code></pre>
 <p>Java and Kotlin use <code>ChromaticDefinitions.edit</code>; Scala’s <code>definitions</code> block calls the same editor. Either every change applies together or none applies, which is called an <em>atomic update</em>. Groovy applies its script’s registrations together after a valid reload. CraftTweaker’s <code>DefinitionBatch</code> supports all seven entry categories and <code>replace(previous)</code>. Keep each returned cleanup object until you want to remove those entries. Create a new draft for another commit.</p></div>
@@ -155,19 +188,34 @@ final class MovementRecipe {
 
     // Common initialization/reload boundary, serialized by the caller.
     void replace() {
-        var next = Map.of(&quot;example/spark&quot;, (MovementRegistry.MovementFactory) (colorRate, motionRate, palette) -&gt;
+        var next = Map.of("example/spark",
+            (MovementRegistry.MovementFactory) (colorRate,
+            motionRate,
+            palette) -&gt;
                 new EffectBuilder().color((original, x, y) -&gt; palette.get(0))
-                        .offsetY((x, y) -&gt; (float) Math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003) * motionRate)
+                        .offsetY((x,
+                            y) -&gt; (float) Math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003) * motionRate)
                         .opacity(() -&gt; 1).animated(true).build());
         // If validation throws, assignment does not run and the previous scope remains valid.
         owned = MovementScope.replace(next, owned);
     }
+
     // Common CPU authoring: immutable options use the actual movement validator, with no second preset catalog.
     IChromaticEffect preset() {
-        return EffectOptions.palette(0xFF6000, 0xFFFF00).option(&quot;amplitudeY&quot;, 2.5).create(&quot;wave&quot;, 1, 1, 0.5f);
+        return EffectOptions.palette(0xFF6000,
+            0xFFFF00)
+            .option("amplitudeY",
+            2.5)
+            .create("wave",
+            1,
+            1,
+            0.5f);
     }
+
     // Common teardown. Retained old layouts stop invoking unloaded script effects.
-    void close() { if (owned != null) owned.close(); }
+    void close() {
+        if (owned != null) owned.close();
+    }
 }</code></pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Create your own text effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
 
@@ -175,18 +223,28 @@ class MovementRecipeK {
     private var owned: MovementScope? = null
     // Common initialization/reload boundary. Immutable draft data is validated before replacing the old scope.
     fun replace() {
-        val next = mapOf(&quot;example/spark&quot; to MovementRegistry.MovementFactory { _, motionRate, palette -&gt;
+        val next = mapOf("example/spark" to MovementRegistry.MovementFactory {
+            _,
+            motionRate,
+            palette -&gt;
             customEffect {
                 color { _, _, _ -&gt; palette[0] }
-                offsetY { x, _ -&gt; kotlin.math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003).toFloat() * motionRate }
-                opacity { 1f }; animated(true)
+                offsetY {
+                    x,
+                    _ -&gt; kotlin.math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003)
+                    .toFloat() * motionRate
+                }
+                opacity {
+                    1f
+                }; animated(true)
             }
         })
         owned = MovementScope.replace(next, owned)
     }
+
     // Common CPU authoring: option() returns another immutable recipe; effect() runs the real validator.
     fun preset(): IChromaticEffect = effectPalette(0xFF6000, 0xFFFF00)
-        .option(&quot;amplitudeY&quot;, 2.5).effect(&quot;wave&quot;, playback = 0.5f)
+        .option("amplitudeY", 2.5).effect("wave", playback = 0.5f)
     // Common teardown.
     fun close() { owned?.close() }
 }</code></pre>
@@ -196,15 +254,19 @@ import net.phoenix.chromatic_codes.api.TextEffectClock
 
 // Common reloadable GroovyScript. This registry stages a complete factory contribution.
 def movements = mods.chromatic_codes.movements
-movements.register(&#x27;example/spark&#x27;, { colorRate, motionRate, palette -&gt;
+movements.register('example/spark', { colorRate, motionRate, palette -&gt;
     new EffectBuilder().color({ original, x, y -&gt; palette[0] })
-        .offsetY({ x, y -&gt; (Math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003) * motionRate) as float })
+        .offsetY({
+            x,
+            y -&gt; (Math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003) * motionRate) as float
+        })
         .opacity({ -&gt; 1f }).animated(true).build()
 })
+
 // Invalid drafts retain the last valid factories. Successful replacement expires the old generation.
 // Factory construction runs on the requesting thread: keep client rendering outside these callbacks.
 def preset = { -&gt; EffectOptions.palette(0xFF6000, 0xFFFF00)
-    .option(&#x27;amplitudeY&#x27;, 2.5d).create(&#x27;wave&#x27;, 1f, 1f, 0.5f) }
+    .option('amplitudeY', 2.5d).create('wave', 1f, 1f, 0.5f) }
 // Loader-owned teardown removes only exact registrations. Old layouts become inert.</code></pre>
 <pre data-language="scala" tabindex="0" role="region" aria-label="Create your own text effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.api.*
 import net.phoenix.chromatic_codes.scaladsl.Chromatic.{customEffect, effectPalette}
@@ -215,30 +277,62 @@ final class MovementRecipeS:
   def replace(): Unit =
     val factory: MovementRegistry.MovementFactory = (colorRate, motionRate, palette) =&gt;
       customEffect(builder =&gt; builder.color((original, x, y) =&gt; palette.get(0))
-        .offsetY((x, y) =&gt; math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003).toFloat * motionRate)
+        .offsetY((x,
+            y) =&gt; math.sin(x * 0.1 + TextEffectClock.milliseconds() * 0.003).toFloat * motionRate)
         .opacity(() =&gt; 1f).animated(true))
-    owned = MovementScope.replace(java.util.Map.of(&quot;example/spark&quot;, factory), owned)
+    owned = MovementScope.replace(java.util.Map.of("example/spark", factory), owned)
   // Common authoring: this immutable recipe is validated by the actual selected movement on create.
   def preset(): IChromaticEffect =
-    effectPalette(0xFF6000, 0xFFFF00).option(&quot;amplitudeY&quot;, Double.box(2.5)).create(&quot;wave&quot;, 1, 1, 0.5f)
+    effectPalette(0xFF6000,
+        0xFFFF00)
+        .option("amplitudeY",
+        Double.box(2.5))
+        .create("wave",
+        1,
+        1,
+        0.5f)
   // Common teardown; a failed replacement leaves the old scope active.
   def close(): Unit = if owned != null then owned.close()</code></pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Create your own text effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 // Common startup: ZenScript authors reusable effect instances, rather than palette-parameterized movement factories.
 val spark = Text.customEffect()
-    .color(function(original, x, y) { return 0xFFCC00; })
-    .offsetY(function(x, y) { return ((Text.milliseconds() % 1000.0) / 1000.0) as float; })
-    .scale(function(x, y) { return 1.0 as float; })
-    .scaleX(function(x, y) { return 1.0 as float; })
-    .scaleY(function(x, y) { return 1.0 as float; })
-    .opacity(function() { return 1.0 as float; })
-    .outlineColor(function() { return 0xFF6000; }).animated(true).transformsWholeSegment(false).build();
-val preset = Text.effect(&quot;wave&quot;, [0xFF6000, 0xFFFF00]).option(&quot;amplitudeY&quot;, 2.5).speed(0.5);
-val owned = Text.batch().namedEffect(&quot;example:spark&quot;, &quot;spark&quot;, spark)
-    .namedEffect(&quot;example:wave&quot;, &quot;warm_wave&quot;, preset).commit();
+    .color(function(original, x, y) {
+        return 0xFFCC00;
+    })
+    .offsetY(function(x,
+        y) {
+        return ((Text.milliseconds() % 1000.0) / 1000.0) as float;
+    })
+    .scale(function(x, y) {
+        return 1.0 as float;
+    })
+    .scaleX(function(x, y) {
+        return 1.0 as float;
+    })
+    .scaleY(function(x, y) {
+        return 1.0 as float;
+    })
+    .opacity(function() {
+        return 1.0 as float;
+    })
+    .outlineColor(function() {
+        return 0xFF6000;
+    })
+    .animated(true)
+    .transformsWholeSegment(false)
+    .build();
+val preset = Text.effect("wave",
+    [0xFF6000,
+    0xFFFF00])
+    .option("amplitudeY",
+    2.5)
+    .speed(0.5);
+
+val owned = Text.batch().namedEffect("example:spark", "spark", spark)
+    .namedEffect("example:wave", "warm_wave", preset).commit();
 // Keep owned for later teardown with close(). Named callbacks replace channel strings;
-// Text.custom&#x27;s original string-channel sampler remains available for existing scripts.</code></pre>
+// Text.custom's original string-channel sampler remains available for existing scripts.</code></pre>
 <h3 id="custom-effect-construction">Let callers choose colors for your effect</h3><p>In the Java, Kotlin, Scala and Groovy examples, <code>replace()</code> registers <code>example/spark</code>. The library calls that constructor function with a palette and movement controls each time a caller asks for a new spark effect. Replacing the registration validates the new set first; if it fails, the previous set stays active. Keep the returned <code>MovementScope</code> until you want to remove that set. Closing an older scope cannot remove a newer replacement.</p><p>The callbacks can supply color, position offsets, opacity, size, and outline settings. <code>build()</code> fixes which functions the effect uses; changing variables captured by those functions can still change its behavior, so protect shared mutable data yourself. Java and Groovy can also register a function that constructs a new effect for a supplied palette and movement settings. That constructor function is called a <em>movement factory</em>. ZenScript builds reusable effect instances instead of registering arbitrary palette-dependent constructors.</p></div>
 <div class="av-example-group" data-example="chromatic-lifecycle-inspection"><h2 id="chromatic-lifecycle-inspection">Find the visible character and style at a text position</h2><p>Pass formatted text to this example to find which visible character and style correspond to a position in the original string. For example, formatting markers take up string positions but draw no character. The returned data can help with text selection or inspection without drawing anything.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
@@ -248,6 +342,7 @@ final class GlyphInspectionRecipe {
     // Common CPU query. No font renderer, graphics context or script callback is sampled.
     static TextInspection inspect(String source) {
         var view = TextInspection.of(ChromaticText.compile(source));
+
         if (!view.glyphs().isEmpty()) {
             var glyph = view.glyphs().get(0);
             int flags = glyph.style().flags();
@@ -255,6 +350,7 @@ final class GlyphInspectionRecipe {
             int safeStart = view.glyphToSource(0, false);
             int selected = view.sourceToGlyph(safeStart, true);
         }
+
         return view; // Safe to retain across definition reloads; request another snapshot for new definitions.
     }
 }</code></pre>
@@ -268,8 +364,10 @@ object GlyphInspectionRecipeK {
         view.glyphs().firstOrNull()?.let { glyph -&gt;
             val bold = glyph.style().flags() and 2 != 0
             val safeStart = view.glyphToSource(0, false)
+
             val selected = view.sourceToGlyph(safeStart, true)
         }
+
         return view
     }
 }</code></pre>
@@ -279,6 +377,7 @@ import net.phoenix.chromatic_codes.api.TextInspection
 // Common CPU query. Immutable snapshots retain source spans, flags, colors, tokens, effects and segment boundaries.
 def inspect = { String source -&gt;
     def view = TextInspection.of(ChromaticText.compile(source))
+
     if (!view.glyphs().isEmpty()) {
         def glyph = view.glyphs()[0]
         boolean bold = (glyph.style().flags() &amp; 2) != 0
@@ -295,28 +394,42 @@ object GlyphInspectionRecipeS:
     val view = TextInspection.of(ChromaticText.compile(source))
     if !view.glyphs().isEmpty then
       val glyph = view.glyphs().get(0)
+
       val bold = (glyph.style().flags() &amp; 2) != 0
       val safeStart = view.glyphToSource(0, false)
+
       val selected = view.sourceToGlyph(safeStart, true)
     view</code></pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 // Common CPU query, safe without a client renderer.
-val view = Text.compile(&quot;§lA😀§rB&quot;);
+val view = Text.compile("§lA😀§rB");
+
 val glyph = view.view(1);
+
 print(glyph.text);
+
 print(glyph.bold);
+
 print(glyph.color);       // -1 means no explicit RGB color.
 print(glyph.effect);      // Empty text means no effect ID.
 print(glyph.outline);
+
 print(glyph.segmentStart);
+
 print(glyph.segmentEnd);
-val safeLeft = view.boundary(4, false); // Snap out of the middle of the emoji&#x27;s UTF-16 pair.
+
+val safeLeft = view.boundary(4,
+    false); // Snap out of the middle of the emoji's UTF-16 pair.
 val selected = view.sourceToGlyph(safeLeft, true);
+
 val end = view.glyphToSource(selected, true);
+
 // Keep this immutable view as editor data; request another view after definitions change.</code></pre>
 <p>Positions are Java UTF-16 string indices: some characters, such as an emoji, occupy two index positions even though they look like one character. sourceToGlyph uses an explicit gap direction and returns -1 when no glyph exists in that direction. boundary snaps out of surrogate pairs; combining sequences can still contain several glyphs. Each glyph also exposes an immutable style view, including flags, colors, original tokens, effect identity and segment spans.</p></div>
-<h3 id="custom-effect-settings">Reuse colors and settings without changing the original</h3><p>The <code>preset()</code> methods above build an orange-to-yellow wave with height 2.5 and half-speed playback. They are separate from the custom spark constructor. ZenScript uses <code>Text.effect</code> to build that reusable wave. </p><p><code>EffectOptions</code> stores a copy of the colors and numeric settings. Changing an option returns a separate settings value, leaving the original usable elsewhere; this is what <em>immutable</em> means here. Calling <code>create</code>/<code>effect</code> still checks the chosen effect’s supported settings and limits. Existing string-named channel samplers remain available. See <a href="../EffectBuilder.html">EffectBuilder</a>, <a href="../EffectOptions.html">EffectOptions</a>.</p><h2 id="chromatic-lifecycle-outcomes">Handle reloads, errors, and cleanup</h2><table><caption>What is kept or removed after each action</caption><thead><tr><th scope="col">When</th><th scope="col">Outcome</th></tr></thead><tbody><tr><td>A definition draft fails validation</td><td>The prior snapshot and its ownership records remain unchanged.</td></tr><tr><td>A replacement succeeds</td><td>Closing an older receipt leaves the replacement intact; displaced older entries are not restored.</td></tr><tr><td>A Groovy movement draft fails</td><td>The previously registered effect constructors stay available after validation failure.</td></tr><tr><td>A movement owner unloads</td><td>Its exact registrations are removed and retained old effects stop invoking its callbacks.</td></tr><tr><td>An editor retains a layout</td><td>The saved source and style values stay unchanged. Parse the text again to see newer definitions.</td></tr></tbody></table><nav class="av-pager" aria-label="Guide navigation"><a href="effects.html">Previous: Choose an effect and adjust its appearance</a><a href="troubleshooting.html">Next: Troubleshooting</a></nav></div></main>
+<h3 id="custom-effect-settings">Reuse colors and settings without changing the original</h3><p>The <code>preset()</code> methods above build an orange-to-yellow wave with height 2.5 and half-speed playback. They are separate from the custom spark constructor. ZenScript uses <code>Text.effect</code> to build that reusable wave. </p><p><code>EffectOptions</code> stores a copy of the colors and numeric settings. Changing an option returns a separate settings value, leaving the original usable elsewhere; this is what <em>immutable</em> means here. Calling <code>create</code>/<code>effect</code> still checks the chosen effect’s supported settings and limits. Existing string-named channel samplers remain available. See <a href="../EffectBuilder.html">EffectBuilder</a>, <a href="../EffectOptions.html">EffectOptions</a>.</p><h2 id="chromatic-lifecycle-outcomes">Handle reloads, errors, and cleanup</h2><table><caption>What is kept or removed after each action</caption><thead><tr><th scope="col">When</th><th scope="col">Outcome</th></tr></thead><tbody><tr><td>A definition draft fails validation</td><td>The prior snapshot and its ownership records remain unchanged.</td></tr><tr><td>A replacement succeeds</td><td>Closing an older receipt leaves the replacement intact; displaced older entries are not restored.</td></tr><tr><td>A Groovy movement draft fails</td><td>The previously registered effect constructors stay available after validation failure.</td></tr><tr><td>A movement owner unloads</td><td>Its exact registrations are removed and retained old effects stop invoking its callbacks.</td></tr><tr><td>An editor retains a layout</td><td>The saved source and style values stay unchanged. Parse the text again to see newer definitions.</td></tr></tbody></table><section class="av-call-guide"><h2 id="lifecycle-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../ChromaticDefinitions.html">ChromaticDefinitions</a>.<a href="../ChromaticDefinitions.html#edit(java.util.function.Consumer)">edit</a>(editorCallback)</code></td><td>Callback describing the complete edit</td><td>Validate and apply related definition changes together; a failed edit leaves them unapplied.</td></tr><tr><td><code>editor.<a href="../ChromaticDefinitions.Editor.html#register(net.phoenix.chromatic_codes.api.ChromaticDefinitions.Kind,net.minecraft.util.ResourceLocation,java.lang.Object,java.lang.Integer,net.phoenix.chromatic_codes.api.IChromaticEffect)">register</a>(kind, id, trigger, color, effect)</code></td><td>Entry category and its data</td><td>Keep the returned registration information for later removal.</td></tr><tr><td><code><a href="../MovementScope.html">MovementScope</a>.<a href="../MovementScope.html#replace(java.util.Map,net.phoenix.chromatic_codes.api.MovementScope)">replace</a>(factories, previous)</code></td><td>Factory map; previous owned scope</td><td>Replace your effect constructors while retaining ownership of this scope.</td></tr><tr><td><code><a href="../EffectOptions.html">EffectOptions</a>.<a href="../EffectOptions.html#palette(int...)">palette</a>(...).<a href="../EffectOptions.html#option(java.lang.String,java.lang.Object)">option</a>(name, value)</code></td><td>RGB palette; option name and value</td><td>Build a reusable option description, then create a concrete effect.</td></tr></tbody></table><p><strong>When you finish:</strong> Close the cleanup object returned by the example’s install method when those styles are no longer needed. Close your MovementScope separately. Definition edits apply together; individual movement registrations do not acquire the same all-or-nothing behavior automatically.</p></section>
+
+<nav class="av-pager" aria-label="Guide navigation"><a href="effects.html">Previous: Choose an effect and adjust its appearance</a><a href="troubleshooting.html">Next: Troubleshooting</a></nav></div></main>
 </div>
 </body>
 </html>

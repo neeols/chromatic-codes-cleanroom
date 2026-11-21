@@ -56,7 +56,7 @@ loadScripts(document, 'script');</script>
 <div class="main-grid">
 <main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript">
 <h1 id="choose-an-effect-and-adjust-its-appearance-heading">Choose an effect and adjust its appearance</h1>
-<p class="av-lead">Choose a text animation, set its colors and speed, and adjust the settings it accepts. The table shows what each built-in effect looks like. Create an effect with <code>MovementRegistry.create</code>, then register a formatting code when text needs to select it.</p><section class="av-call-guide"><h2 id="effects-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../MovementRegistry.html">MovementRegistry</a>.<a href="../MovementRegistry.html#create(java.lang.String,float,float,java.util.List,float,java.util.Map)">create</a>(...)</code></td><td>Effect ID and the settings in the examples</td><td>Validate and copy a nonempty palette, then construct the selected effect.</td></tr><tr><td><code><a href="../IChromaticEffect.html#getRenderColor(int,float,float)">getRenderColor</a>(original, x, y)</code></td><td>Original RGB color; glyph position</td><td>Read the color chosen for this glyph.</td></tr><tr><td><code><a href="../IChromaticEffect.html#getXOffset(float,float)">getXOffset</a>(x, y) / <a href="../IChromaticEffect.html#getYOffset(float,float)">getYOffset</a>(x, y)</code></td><td>Glyph position in GUI units</td><td>Read the displacement used when drawing.</td></tr><tr><td><code><a href="../TextEffectClock.html">TextEffectClock</a>.<a href="../TextEffectClock.html#at(double)">at</a>(milliseconds)</code></td><td>Preview time in milliseconds</td><td>Temporarily evaluate an effect at a specific time; use try-with-resources to restore the previous clock.</td></tr><tr><td><code>colorSpeed / moveSpeed</code></td><td>Finite effect-specific controls</td><td>Adjust the selected effect’s color and movement behavior. Geometry settings remain independent of playback speed.</td></tr><tr><td><code>animationSpeed</code></td><td>Finite multiplier from -32 to 32</td><td>Change playback speed; a negative value reverses time and zero freezes it.</td></tr><tr><td><code>options</code></td><td>Map of supported setting names to values</td><td>Override matching keys in the effect descriptor. Unsupported names and invalid ranges are rejected.</td></tr></tbody></table><p><strong>When you finish:</strong> An effect value itself has no registration to remove. If you register it under a formatting trigger, keep and close that registration’s receipt. Always close a temporary clock scope, including when drawing or inspection throws.</p></section>
+<p class="av-lead">Choose a text animation, set its colors and speed, and adjust the settings it accepts. The table shows what each built-in effect looks like. Create an effect with <code>MovementRegistry.create</code>, then register a formatting code when text needs to select it.</p>
 <div class="av-language">
 </div>
 <h2 id="movements">Choose one of the 28 built-in effects</h2>
@@ -261,10 +261,19 @@ and register its callbacks. The interface explains sampling, animation time and 
 <h2 id="effects-recipe-custom-callback">Write a function that colors text red</h2>
 <p>This custom callback keeps position and size unchanged and supplies a fixed red foreground. Replace the sample expression with your own animation while retaining finite output.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Write a function that colors text red — java"><code class="language-java">import net.phoenix.chromatic_codes.api.IChromaticEffect;
+
 IChromaticEffect custom = new IChromaticEffect() {
-    &#64;Override public int getRenderColor(int original, float x, float y) { return 0xFF0000; }
-    &#64;Override public float getXOffset(float x, float y) { return 0; }
-    &#64;Override public float getYOffset(float x, float y) { return 0; }
+    @Override public int getRenderColor(int original,
+        float x,
+        float y) {
+        return 0xFF0000;
+    }
+    @Override public float getXOffset(float x, float y) {
+        return 0;
+    }
+    @Override public float getYOffset(float x, float y) {
+        return 0;
+    }
 };</code>
 </pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Write a function that colors text red — kotlin"><code class="language-kotlin">val custom = object : IChromaticEffect {
@@ -274,6 +283,7 @@ IChromaticEffect custom = new IChromaticEffect() {
 }</code>
 </pre>
 <pre data-language="groovy" tabindex="0" role="region" aria-label="Write a function that colors text red — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.IChromaticEffect
+
 def custom = [
     getRenderColor: { int original, float x, float y -&gt; 0xFF0000 },
     getXOffset: { float x, float y -&gt; 0f },
@@ -286,10 +296,10 @@ def custom = [
   override def getYOffset(x: Float, y: Float): Float = 0f</code>
 </pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Write a function that colors text red — zenscript"><code class="language-zenscript">val custom = Text.custom(function(channel, x, y, original, fallback, milliseconds) {
-    if (channel == &quot;color&quot;) return 16711680.0;
+    if (channel == "color") return 16711680.0;
     return fallback;
 });
-Text.namedEffect(&quot;my_pack:red&quot;, &quot;red&quot;, custom);</code>
+Text.namedEffect("my_pack:red", "red", custom);</code>
 </pre>
 <p>ZenScript channels cover color, x/y offsets, opacity, uniform and axis scales, outline/color, static/animated classifications, horizontal blending, passthrough and whole-segment transforms. Return fallback for channels you do not change. Generic callbacks cannot manufacture the concrete volumetric layer geometry; use the registered 3d preset for that. The script callback is shared by reference and may be sampled by common-side layout code, so keep it free of client-only assumptions and registry mutation.</p>
 </div>
@@ -297,6 +307,7 @@ Text.namedEffect(&quot;my_pack:red&quot;, &quot;red&quot;, custom);</code>
 <h2 id="effects-recipe-fixed-clock">Preview an animation at a fixed time</h2>
 <p>The example samples the animation at a chosen time, making screenshots or comparisons repeatable. The temporary clock setting applies only to the calling thread and is restored when the block returns or throws. Playback speed still multiplies the time seen by the effect.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — java"><code class="language-java">import net.phoenix.chromatic_codes.api.TextEffectClock;
+
 try (var sample = TextEffectClock.at(250.0)) {
     int rgb = effect.getRenderColor(0xFFFFFF, 10, 20);
 }</code>
@@ -306,7 +317,9 @@ try (var sample = TextEffectClock.at(250.0)) {
 }</code>
 </pre>
 <pre data-language="groovy" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.TextEffectClock
+
 def sample = TextEffectClock.at(250d)
+
 try { def rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f) }
 finally { sample.close() }</code>
 </pre>
@@ -315,12 +328,17 @@ finally { sample.close() }</code>
 }</code>
 </pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — zenscript"><code class="language-zenscript">Text.atTime(250.0, function() {
-    val width = Text.compile(&quot;&amp;[warm_wave]ABC&quot;).width(function(character) { return 6; });
+    val width = Text.compile("&amp;[warm_wave]ABC")
+        .width(function(character) {
+        return 6;
+    });
     print(width);
 });</code>
 </pre>
 <p>Keep the work synchronous and on the same thread. A clock scope does not make arbitrary mutable callbacks thread-safe. Layout-only sampling does not allocate GPU resources.</p>
 </div>
+<section class="av-call-guide"><h2 id="effects-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../MovementRegistry.html">MovementRegistry</a>.<a href="../MovementRegistry.html#create(java.lang.String,float,float,java.util.List,float,java.util.Map)">create</a>(...)</code></td><td>Effect ID and the settings in the examples</td><td>Validate and copy a nonempty palette, then construct the selected effect.</td></tr><tr><td><code><a href="../IChromaticEffect.html#getRenderColor(int,float,float)">getRenderColor</a>(original, x, y)</code></td><td>Original RGB color; glyph position</td><td>Read the color chosen for this glyph.</td></tr><tr><td><code><a href="../IChromaticEffect.html#getXOffset(float,float)">getXOffset</a>(x, y) / <a href="../IChromaticEffect.html#getYOffset(float,float)">getYOffset</a>(x, y)</code></td><td>Glyph position in GUI units</td><td>Read the displacement used when drawing.</td></tr><tr><td><code><a href="../TextEffectClock.html">TextEffectClock</a>.<a href="../TextEffectClock.html#at(double)">at</a>(milliseconds)</code></td><td>Preview time in milliseconds</td><td>Temporarily evaluate an effect at a specific time; use try-with-resources to restore the previous clock.</td></tr><tr><td><code>colorSpeed / moveSpeed</code></td><td>Finite effect-specific controls</td><td>Adjust the selected effect’s color and movement behavior. Geometry settings remain independent of playback speed.</td></tr><tr><td><code>animationSpeed</code></td><td>Finite multiplier from -32 to 32</td><td>Change playback speed; a negative value reverses time and zero freezes it.</td></tr><tr><td><code>options</code></td><td>Map of supported setting names to values</td><td>Override matching keys in the effect descriptor. Unsupported names and invalid ranges are rejected.</td></tr></tbody></table><p><strong>When you finish:</strong> An effect value itself has no registration to remove. If you register it under a formatting trigger, keep and close that registration’s receipt. Always close a temporary clock scope, including when drawing or inspection throws.</p></section>
+
 <nav class="av-pager" aria-label="Guide navigation"><a href="configuration.html">Previous: Configuration in your mod</a><a href="lifecycle.html">Next: Register text styles and read formatted text</a></nav></div></main>
 </div>
 </body>

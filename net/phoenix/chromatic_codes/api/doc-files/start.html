@@ -56,7 +56,7 @@ loadScripts(document, 'script');</script>
 <div class="main-grid">
 <main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript">
 <h1 id="your-first-effect-heading">Your first effect</h1>
-<p class="av-lead">Make Minecraft text use a custom color or animation. Start by trying a preset in the effect gallery, then register a name that your mod can put in formatted text. Keep the returned registration handle if you will remove that name later.</p><section class="av-call-guide"><h2 id="start-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../MovementRegistry.html">MovementRegistry</a>.<a href="../MovementRegistry.html#create(java.lang.String,float,float,java.util.List,float,java.util.Map)">create</a>(id, colorSpeed, moveSpeed, palette, animationSpeed, options)</code></td><td>Effect ID; color/movement controls; RGB palette; playback multiplier; option map</td><td>Choose a built-in effect and its settings. Use the effect’s reference for supported option names and ranges.</td></tr><tr><td><code><a href="../ChromaticDefinitions.html">ChromaticDefinitions</a>.<a href="../ChromaticDefinitions.html#register(net.phoenix.chromatic_codes.api.ChromaticDefinitions.Kind,net.minecraft.util.ResourceLocation,java.lang.Object,java.lang.Integer,net.phoenix.chromatic_codes.api.IChromaticEffect)">register</a>(kind, id, trigger, color, effect)</code></td><td>Entry kind; unique registration ID; text trigger; color/effect</td><td>Register the entry your text should select. Only supply the color or effect appropriate to that kind.</td></tr><tr><td><code>receipt.<a href="../ChromaticDefinitions.Registration.html#close()">close</a>()</code></td><td>No arguments</td><td>Remove the entry installed by this receipt when your addon or script no longer needs it.</td></tr><tr><td><code>colorSpeed / moveSpeed</code></td><td>Finite effect-specific controls</td><td>Adjust the selected effect’s color and movement behavior. Geometry settings remain independent of playback speed.</td></tr><tr><td><code>animationSpeed</code></td><td>Finite multiplier from -32 to 32</td><td>Change playback speed; a negative value reverses time and zero freezes it.</td></tr><tr><td><code>options</code></td><td>Map of supported setting names to values</td><td>Override matching keys in the effect descriptor. Unsupported names and invalid ranges are rejected.</td></tr></tbody></table><p><strong>When you finish:</strong> Creating an effect does not register a text trigger. Retain the receipt through the tool/script lifetime and close it during teardown. Parsing and registration do not need a screen; calls to Minecraft’s font renderer run on the client thread.</p></section>
+<p class="av-lead">Make Minecraft text use a custom color or animation. Start by trying a preset in the effect gallery, then register a name that your mod can put in formatted text. Keep the returned registration handle if you will remove that name later.</p>
 <div class="av-language">
 </div>
 <h2 id="gallery">Open the effect gallery</h2>
@@ -120,6 +120,7 @@ registration.close();</code>
     ResourceLocation("your_mod", "gold"),
     "gold", 0xFFCC00, null
 )
+
 // Later, when unloading this declaration:
 registration.close()</code>
 </pre>
@@ -166,25 +167,31 @@ unchanged: amplitude is still measured in GUI pixels.</p>
 <h2 id="start-recipe-effect-options">Configure an effect</h2>
 <p>This creates a wave effect with the supplied colors and vertical amplitude, then sets its playback speed independently. Each language produces the same effect. Creating it alone does not give text a code to use; register a name for it in the next example.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Configure an effect — java"><code class="language-java">import net.phoenix.chromatic_codes.api.MovementRegistry;
-var effect = MovementRegistry.create(&quot;wave&quot;, 1, 1,
+
+var effect = MovementRegistry.create("wave", 1, 1,
     java.util.List.of(0xFF4000, 0xFFD000), 0.5f,
-    java.util.Map.of(&quot;amplitudeY&quot;, 2.5));</code>
+    java.util.Map.of("amplitudeY", 2.5));</code>
 </pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Configure an effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
-val effect = textEffect(&quot;wave&quot;, listOf(0xFF4000, 0xFFD000),
-    playbackSpeed = 0.5f, options = mapOf(&quot;amplitudeY&quot; to 2.5))</code>
+
+val effect = textEffect("wave", listOf(0xFF4000, 0xFFD000),
+    playbackSpeed = 0.5f, options = mapOf("amplitudeY" to 2.5))</code>
 </pre>
 <pre data-language="groovy" tabindex="0" role="region" aria-label="Configure an effect — groovy"><code class="language-groovy">def text = mods.chromatic_codes.text
-def effect = text.effect(&#x27;wave&#x27;, [0xFF4000, 0xFFD000],
+def effect = text.effect('wave', [0xFF4000, 0xFFD000],
     1f, 1f, 0.5f, [amplitudeY: 2.5d])</code>
 </pre>
 <pre data-language="scala" tabindex="0" role="region" aria-label="Configure an effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
-val effect = net.phoenix.chromatic_codes.scaladsl.Chromatic.effect(&quot;wave&quot;, 0xFF4000, 0xFFD000)
-  .option(&quot;amplitudeY&quot;, 2.5).speed(0.5f).build()</code>
+
+val effect = net.phoenix.chromatic_codes.scaladsl.Chromatic.effect("wave",
+    0xFF4000,
+    0xFFD000)
+  .option("amplitudeY", 2.5).speed(0.5f).build()</code>
 </pre>
 <pre data-language="zenscript" tabindex="0" role="region" aria-label="Configure an effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
-val effect = Text.effect(&quot;wave&quot;, [0xFF4000, 0xFFD000])
-    .option(&quot;amplitudeY&quot;, 2.5).speed(0.5);</code>
+
+val effect = Text.effect("wave", [0xFF4000, 0xFFD000])
+    .option("amplitudeY", 2.5).speed(0.5);</code>
 </pre>
 <p>The selected effect checks these settings when it is created. Playback speed changes how fast time advances through the animation; it does not change the wave’s height or letter spacing. The meanings of the other speed controls depend on the effect. Built-in effect types are ready after mod construction; register a custom type before trying to create it.</p>
 </div>
@@ -193,39 +200,48 @@ val effect = Text.effect(&quot;wave&quot;, [0xFF4000, 0xFFD000])
 <p>This registers a gold color and a wave effect under names your text can use. Choose IDs in your mod’s namespace and keep the returned registration objects. Call <code>close()</code> later when removing those entries, not immediately after setup. Groovy replaces its previous script registrations after a successful reload; CraftTweaker records the changes as startup actions.</p>
 <pre data-language="java" tabindex="0" role="region" aria-label="Register a text code and remove it later — java"><code class="language-java">import net.minecraft.util.ResourceLocation;
 import net.phoenix.chromatic_codes.api.ChromaticDefinitions;
+
 var receipt = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT_NAME,
-    new ResourceLocation(&quot;my_mod&quot;, &quot;warm_wave&quot;), &quot;warm_wave&quot;, null, effect);
+    new ResourceLocation("my_mod", "warm_wave"), "warm_wave", null, effect);
 // Later, when your contribution unloads:
 receipt.close();</code>
 </pre>
 <pre data-language="kotlin" tabindex="0" role="region" aria-label="Register a text code and remove it later — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
-val receipt = effectCode(ResourceLocation(&quot;my_mod&quot;, &quot;warm_wave&quot;), &quot;warm_wave&quot;, effect)
+
+val receipt = effectCode(ResourceLocation("my_mod", "warm_wave"), "warm_wave", effect)
+
 // Later, when your contribution unloads:
 receipt.close()</code>
 </pre>
 <pre data-language="groovy" tabindex="0" role="region" aria-label="Register a text code and remove it later — groovy"><code class="language-groovy">// In the reloadable script loader; do not manually call lifecycle hooks:
-text.namedEffect(&#x27;my_pack:warm_wave&#x27;, &#x27;warm_wave&#x27;, effect)
-text.color(&#x27;my_pack:gold&#x27;, &#x27;gold&#x27;, 0xFFCC00)
-// Omitting these declarations from a successful reload removes this owner&#x27;s entries.</code>
+text.namedEffect('my_pack:warm_wave', 'warm_wave', effect)
+text.color('my_pack:gold', 'gold', 0xFFCC00)
+
+// Omitting these declarations from a successful reload removes this owner's entries.</code>
 </pre>
 <pre data-language="scala" tabindex="0" role="region" aria-label="Register a text code and remove it later — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
-val codes = definitions(&quot;my_mod&quot;) { text =&gt;
-  text.effect(&quot;warm_wave&quot;, effect)
-  text.color(&quot;gold&quot;, 0xFFCC00)
+
+val codes = definitions("my_mod") { text =&gt;
+  text.effect("warm_wave", effect)
+  text.color("gold", 0xFFCC00)
 }
+
 // Later, on contribution unload:
 codes.close()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect(&quot;my_pack:warm_wave&quot;, &quot;warm_wave&quot;, effect);
-Text.color(&quot;my_pack:gold&quot;, &quot;gold&quot;, 0xFFCC00);
-// Explicitly remove only this facade&#x27;s still-current contribution:
-Text.remove(&quot;my_pack:warm_wave&quot;);</code>
+<pre data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect("my_pack:warm_wave", "warm_wave", effect);
+Text.color("my_pack:gold", "gold", 0xFFCC00);
+
+// Explicitly remove only this facade's still-current contribution:
+Text.remove("my_pack:warm_wave");</code>
 </pre>
 <p>Closing a registration removes only the exact entry it installed. If another registration has replaced it, closing the older object leaves the new entry in place. Removing the replacement does not restore the displaced entry. A short <code>try-with-resources</code> or Kotlin <code>use</code> block around setup would remove your code as soon as that block ends.</p>
 </div>
 <h2 id="next">Keep learning</h2>
 <p>Read the <a href="syntax.html">formatting rules</a> for reset behavior and limits,
 or the <a href="configuration.html">configuration guide</a> to use the library from another mod.</p>
+<section class="av-call-guide"><h2 id="start-call-sequence">Calls used in the examples</h2><table><caption>Calls used in this guide</caption><thead><tr><th scope="col">Call or setting</th><th scope="col">Arguments</th><th scope="col">What it does</th></tr></thead><tbody><tr><td><code><a href="../MovementRegistry.html">MovementRegistry</a>.<a href="../MovementRegistry.html#create(java.lang.String,float,float,java.util.List,float,java.util.Map)">create</a>(id, colorSpeed, moveSpeed, palette, animationSpeed, options)</code></td><td>Effect ID; color/movement controls; RGB palette; playback multiplier; option map</td><td>Choose a built-in effect and its settings. Use the effect’s reference for supported option names and ranges.</td></tr><tr><td><code><a href="../ChromaticDefinitions.html">ChromaticDefinitions</a>.<a href="../ChromaticDefinitions.html#register(net.phoenix.chromatic_codes.api.ChromaticDefinitions.Kind,net.minecraft.util.ResourceLocation,java.lang.Object,java.lang.Integer,net.phoenix.chromatic_codes.api.IChromaticEffect)">register</a>(kind, id, trigger, color, effect)</code></td><td>Entry kind; unique registration ID; text trigger; color/effect</td><td>Register the entry your text should select. Only supply the color or effect appropriate to that kind.</td></tr><tr><td><code>receipt.<a href="../ChromaticDefinitions.Registration.html#close()">close</a>()</code></td><td>No arguments</td><td>Remove the entry installed by this receipt when your addon or script no longer needs it.</td></tr><tr><td><code>colorSpeed / moveSpeed</code></td><td>Finite effect-specific controls</td><td>Adjust the selected effect’s color and movement behavior. Geometry settings remain independent of playback speed.</td></tr><tr><td><code>animationSpeed</code></td><td>Finite multiplier from -32 to 32</td><td>Change playback speed; a negative value reverses time and zero freezes it.</td></tr><tr><td><code>options</code></td><td>Map of supported setting names to values</td><td>Override matching keys in the effect descriptor. Unsupported names and invalid ranges are rejected.</td></tr></tbody></table><p><strong>When you finish:</strong> Creating an effect does not register a text trigger. Retain the receipt through the tool/script lifetime and close it during teardown. Parsing and registration do not need a screen; calls to Minecraft’s font renderer run on the client thread.</p></section>
+
 <nav class="av-pager" aria-label="Guide navigation"><a href="syntax.html">Next: Formatting rules</a></nav></div></main>
 </div>
 </body>

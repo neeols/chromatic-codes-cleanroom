@@ -194,6 +194,7 @@ public final class Recipe {
     public static void drawTitle(FontRenderer font, int center, int top) {
         var face = book();
         String title = "&amp;[rainbow]Hello§r";
+
         try (var selection = Typefaces.with(face)) {
             float left = center - font.getStringWidth(title) / 2f;
             font.drawString(title, left, top, 0xFFFFFFFF, true);
@@ -208,6 +209,7 @@ fun book(): TypefaceSelection = TypefaceSelection.of("example:book")
 
 fun drawTitle(font: FontRenderer, center: Int, top: Int) {
     val face = book()
+
     val title = "&amp;[rainbow]Hello§r"
     face.withTypeface {
         val left = center - font.getStringWidth(title) / 2f
@@ -222,6 +224,7 @@ def book(): TypefaceSelection = TypefaceSelection.of("example:book")
 
 def drawTitle(font: FontRenderer, center: Int, top: Int): Unit =
   val face = book()
+
   val title = "&amp;[rainbow]Hello§r"
   ClientTypeface.withSelection(face) {
     val left = center.toFloat - font.getStringWidth(title) / 2f
