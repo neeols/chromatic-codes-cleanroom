@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -101,7 +101,7 @@ Between the tilde and closing bracket, use one of these forms:</p>
 <p>A movement ID selects an effect type, such as <code>wave</code> or <code>size</code>.
 The <a href="effects.html">effect reference</a> lists the built-in IDs and explains their controls.
 Append semicolon-separated <code>option=value</code> settings to the movement, as in the last example:</p>
-<pre><code class="language-text">&amp;[~FF0000,0000FF]Static palette§r
+<pre data-wiki-readable="true" data-wiki-recipe="code-0"><code class="language-text">&amp;[~FF0000,0000FF]Static palette§r
 &amp;[~size]Large text§r
 &amp;[~0.5:1:1:wave;amplitudeY=2:FF0000,FFD000]Slow wave§r</code>
 </pre>
@@ -150,7 +150,7 @@ through the same application API. The standalone listener stops applying its own
 <div class="av-example-group" data-example="layout-metrics">
 <h2 id="syntax-recipe-layout-metrics">Measure formatted text and fit it into a line</h2>
 <p>The example measures formatted text, wraps it into lines, and trims it to a chosen width. Supply a function returning each character’s ordinary width in your font. The example’s constant width of six only demonstrates the calls; Minecraft’s usual font gives different letters different widths.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
 
 var layout = ChromaticText.compile("&amp;[gold]ABC");
 float width = layout.width(character -&gt; 6);
@@ -160,7 +160,7 @@ String wrapped = layout.wrap(12, character -&gt; 6);
 var first = layout.glyphs().getFirst();
 String visible = layout.plain();</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile("&amp;[gold]ABC")
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile("&amp;[gold]ABC")
 
 val width = layout.width { 6 }
 
@@ -172,7 +172,7 @@ val first = layout.glyphs().first()
 
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile('&amp;[gold]ABC')
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile('&amp;[gold]ABC')
 
 def width = layout.width({ c -&gt; 6 } as java.util.function.ToIntFunction)
 
@@ -184,7 +184,7 @@ def first = layout.glyphs().getFirst()
 
 def visible = layout.plain()</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile("&amp;[gold]ABC")
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile("&amp;[gold]ABC")
 
 val width = layout.width(_ =&gt; 6)
 
@@ -196,7 +196,7 @@ val first = layout.glyphs().getFirst()
 
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile("&amp;[gold]ABC");
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile("&amp;[gold]ABC");
 
 val width = layout.width(function(character) {
     return 6;
@@ -218,23 +218,23 @@ val visible = layout.plain();</code>
 <div class="av-example-group" data-example="all-code-kinds">
 <h2 id="syntax-recipe-all-code-kinds">Choose how text refers to a color or effect</h2>
 <p>Choose a short character code such as <code>&amp;z</code>, a readable name such as <code>&amp;[gold]</code>, or an effect object used directly by your code. The examples register each kind. Character and named colors, effects, and outlines are separate entry categories.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — java"><code class="language-java">var color = ChromaticDefinitions.register(ChromaticDefinitions.Kind.COLOR_CHAR,
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — java"><code class="language-java">var color = ChromaticDefinitions.register(ChromaticDefinitions.Kind.COLOR_CHAR,
     new ResourceLocation("my_mod", "gold_char"), 'Z', 0xFFCC00, null);
 var direct = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT,
     new ResourceLocation("my_mod", "direct_wave"), null, null, effect);
 // Retain both receipts until unload.</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — kotlin"><code class="language-kotlin">val color = formattingCode(ChromaticDefinitions.Kind.COLOR_CHAR,
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — kotlin"><code class="language-kotlin">val color = formattingCode(ChromaticDefinitions.Kind.COLOR_CHAR,
     ResourceLocation("my_mod", "gold_char"), trigger = 'Z', rgb = 0xFFCC00)
 val direct = formattingCode(ChromaticDefinitions.Kind.EFFECT,
     ResourceLocation("my_mod", "direct_wave"), effect = effect)</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor('my_pack:gold_char', 'Z', 0xFFCC00)
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor('my_pack:gold_char', 'Z', 0xFFCC00)
 text.characterEffect('my_pack:wave_char', 'Y', effect)
 text.characterOutline('my_pack:outline_char', 'X')
 text.directEffect('my_pack:direct_wave', effect)</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions("my_mod") { text =&gt;
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions("my_mod") { text =&gt;
   text.code(ChromaticDefinitions.Kind.COLOR_CHAR,
       "gold_char",
       Char.box('Z'),
@@ -242,7 +242,7 @@ text.directEffect('my_pack:direct_wave', effect)</code>
   text.code(ChromaticDefinitions.Kind.EFFECT, "direct_wave", null, callback = effect)
 }</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor("my_pack:gold_char", "Z", 0xFFCC00);
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor("my_pack:gold_char", "Z", 0xFFCC00);
 Text.characterEffect("my_pack:wave_char", "Y", effect);
 Text.characterOutline("my_pack:outline_char", "X");
 Text.directEffect("my_pack:direct_wave", effect);</code>

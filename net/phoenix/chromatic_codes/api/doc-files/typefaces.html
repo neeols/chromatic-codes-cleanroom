@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -112,9 +112,9 @@ If you hide a bundled font that you previously selected, rendering falls back to
 <p>Use a licensed outline font that you have permission to distribute. Place it under your pack namespace, for
 example <code>assets/example/typefaces/book.ttf</code>.</p>
 <p>To make your family selectable, list it in <code>assets/chromatic_codes/typefaces.json</code>.</p>
-<pre><code class="language-json">["example:book"]</code></pre>
+<pre data-wiki-readable="true" data-wiki-recipe="code-0"><code class="language-json">["example:book"]</code></pre>
 <p>Save the following descriptor as <code>assets/example/typefaces/book.json</code>.</p>
-<pre><code class="language-json">{
+<pre data-wiki-readable="true" data-wiki-recipe="code-1"><code class="language-json">{
   "regular": "example:typefaces/book.ttf"
 }</code></pre>
 <p>The index is optional for families that a client addon registers explicitly. List each ID once per index.
@@ -156,8 +156,8 @@ Unresolved family IDs use the bitmap path until the resource pack becomes availa
 Unicode input. Export the same font file and default font instance that the descriptor references.
 Include the glyph indices the face needs to draw, including shaped forms. Glyphs absent from the atlas
 still have the same logical placement and use hinted rasterization.</p>
-<pre><code class="language-text">msdf-atlas-gen -font book.ttf -glyphset book-glyphs.txt -type mtsdf -size 48 -pxrange 6 -outerpxpadding 2 -format png -imageout book.png -json book-atlas.json</code></pre>
-<pre><code class="language-json">{
+<pre data-wiki-readable="true" data-wiki-recipe="code-2"><code class="language-text">msdf-atlas-gen -font book.ttf -glyphset book-glyphs.txt -type mtsdf -size 48 -pxrange 6 -outerpxpadding 2 -format png -imageout book.png -json book-atlas.json</code></pre>
+<pre data-wiki-readable="true" data-wiki-recipe="code-3"><code class="language-json">{
   "regular": {
     "file": "example:typefaces/book.ttf",
     "image": "example:typefaces/book.png",
@@ -182,7 +182,7 @@ filling the gaps that would occur between separate offset copies of narrow strok
 to select a face while calling the usual Minecraft renderer. The selection scope is local to the client
 thread and restores the previous font when closed, even if a draw fails. Within it, measurement, drawing,
 wrapping, trimming and Minecraft’s text-field caret use the same shaping and spacing.</p>
-<pre data-language="java"><code>import net.minecraft.client.gui.FontRenderer;
+<pre data-wiki-readable="true" data-language="java"><code>import net.minecraft.client.gui.FontRenderer;
 import net.phoenix.chromatic_codes.api.TypefaceSelection;
 import net.phoenix.chromatic_codes.client.typeface.Typefaces;
 
@@ -201,7 +201,7 @@ public final class Recipe {
         }
     }
 }</code></pre>
-<pre data-language="kotlin"><code>import net.minecraft.client.gui.FontRenderer
+<pre data-wiki-readable="true" data-language="kotlin"><code>import net.minecraft.client.gui.FontRenderer
 import net.phoenix.chromatic_codes.api.TypefaceSelection
 import net.phoenix.chromatic_codes.client.typeface.withTypeface
 
@@ -216,7 +216,7 @@ fun drawTitle(font: FontRenderer, center: Int, top: Int) {
         font.drawString(title, left, top.toFloat(), -1, true)
     }
 }</code></pre>
-<pre data-language="scala"><code>import net.minecraft.client.gui.FontRenderer
+<pre data-wiki-readable="true" data-language="scala"><code>import net.minecraft.client.gui.FontRenderer
 import net.phoenix.chromatic_codes.api.TypefaceSelection
 import net.phoenix.chromatic_codes.scaladsl.ClientTypeface
 
@@ -230,7 +230,7 @@ def drawTitle(font: FontRenderer, center: Int, top: Int): Unit =
     val left = center.toFloat - font.getStringWidth(title) / 2f
     font.drawString(title, left, top.toFloat, -1, true)
   }</code></pre>
-<pre data-language="groovy"><code>import net.minecraft.client.gui.FontRenderer
+<pre data-wiki-readable="true" data-language="groovy"><code>import net.minecraft.client.gui.FontRenderer
 import net.phoenix.chromatic_codes.api.TypefaceSelection
 import net.phoenix.chromatic_codes.client.typeface.Typefaces
 

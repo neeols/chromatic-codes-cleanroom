@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -106,7 +106,7 @@ the entry; calling it during setup removes the color immediately.</p>
 Closing the replacement removes it without restoring the earlier entry. See
 <a href="../ChromaticDefinitions.Registration.html">registration lifetime and batch cleanup</a>.</p>
 <noscript><span class="av-example-label">Java</span></noscript>
-<pre data-language="java"><code>var registration = ChromaticDefinitions.register(
+<pre data-wiki-readable="true" data-wiki-recipe="code-0" data-language="java"><code>var registration = ChromaticDefinitions.register(
         ChromaticDefinitions.Kind.COLOR_NAME,
         new ResourceLocation("your_mod", "gold"),
         "gold", 0xFFCC00, null);
@@ -115,7 +115,7 @@ Closing the replacement removes it without restoring the earlier entry. See
 registration.close();</code>
 </pre>
 <noscript><span class="av-example-label">Kotlin</span></noscript>
-<pre data-language="kotlin"><code>val registration = ChromaticDefinitions.register(
+<pre data-wiki-readable="true" data-wiki-recipe="code-1" data-language="kotlin"><code>val registration = ChromaticDefinitions.register(
     ChromaticDefinitions.Kind.COLOR_NAME,
     ResourceLocation("your_mod", "gold"),
     "gold", 0xFFCC00, null
@@ -125,7 +125,7 @@ registration.close();</code>
 registration.close()</code>
 </pre>
 <noscript><span class="av-example-label">Configuration</span></noscript>
-<pre data-language="config"><code># Add this entry to the existing namedColors list in chromatic_codes.cfg:
+<pre data-wiki-readable="true" data-wiki-recipe="code-2" data-language="config"><code># Add this entry to the existing namedColors list in chromatic_codes.cfg:
 [gold]:FFCC00
 # Then use &amp;[gold]Golden text§r</code>
 </pre>
@@ -139,7 +139,7 @@ a trigger for it. These examples also use <code>java.<wbr>util.<wbr>List</code> 
 Declare the <a href="configuration.html#lifecycle">library dependency</a> so these factories are ready
 before your mod creates an effect.</p>
 <noscript><span class="av-example-label">Java</span></noscript>
-<pre data-language="java"><code>var effect = MovementRegistry.create("wave", 1, 1,
+<pre data-wiki-readable="true" data-wiki-recipe="code-3" data-language="java"><code>var effect = MovementRegistry.create("wave", 1, 1,
         List.of(0xFF4000, 0xFFD000), 0.5f,
         Map.of("amplitudeY", 2.5, "wavelength", 72));
 var registration = ChromaticDefinitions.register(
@@ -148,7 +148,7 @@ var registration = ChromaticDefinitions.register(
         "warm_wave", null, effect);</code>
 </pre>
 <noscript><span class="av-example-label">Kotlin</span></noscript>
-<pre data-language="kotlin"><code>val effect = MovementRegistry.create("wave", 1f, 1f,
+<pre data-wiki-readable="true" data-wiki-recipe="code-4" data-language="kotlin"><code>val effect = MovementRegistry.create("wave", 1f, 1f,
     listOf(0xFF4000, 0xFFD000), 0.5f,
     mapOf("amplitudeY" to 2.5, "wavelength" to 72))
 val registration = ChromaticDefinitions.register(
@@ -157,7 +157,7 @@ val registration = ChromaticDefinitions.register(
     "warm_wave", null, effect)</code>
 </pre>
 <noscript><span class="av-example-label">Configuration</span></noscript>
-<pre data-language="config"><code># Add to the existing namedGradients list:
+<pre data-wiki-readable="true" data-wiki-recipe="code-5" data-language="config"><code># Add to the existing namedGradients list:
 [warm_wave]:0.5:1:1:wave;amplitudeY=2.5;wavelength=72:FF4000,FFD000</code>
 </pre>
 <p>A playback speed of 0.5 runs the animation at half speed. It leaves the wave's size
@@ -166,29 +166,29 @@ unchanged: amplitude is still measured in GUI pixels.</p>
 <div class="av-example-group" data-example="effect-options">
 <h2 id="start-recipe-effect-options">Configure an effect</h2>
 <p>This creates a wave effect with the supplied colors and vertical amplitude, then sets its playback speed independently. Each language produces the same effect. Creating it alone does not give text a code to use; register a name for it in the next example.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Configure an effect — java"><code class="language-java">import net.phoenix.chromatic_codes.api.MovementRegistry;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Configure an effect — java"><code class="language-java">import net.phoenix.chromatic_codes.api.MovementRegistry;
 
 var effect = MovementRegistry.create("wave", 1, 1,
     java.util.List.of(0xFF4000, 0xFFD000), 0.5f,
     java.util.Map.of("amplitudeY", 2.5));</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Configure an effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Configure an effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
 
 val effect = textEffect("wave", listOf(0xFF4000, 0xFFD000),
     playbackSpeed = 0.5f, options = mapOf("amplitudeY" to 2.5))</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Configure an effect — groovy"><code class="language-groovy">def text = mods.chromatic_codes.text
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Configure an effect — groovy"><code class="language-groovy">def text = mods.chromatic_codes.text
 def effect = text.effect('wave', [0xFF4000, 0xFFD000],
     1f, 1f, 0.5f, [amplitudeY: 2.5d])</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Configure an effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Configure an effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 val effect = net.phoenix.chromatic_codes.scaladsl.Chromatic.effect("wave",
     0xFF4000,
     0xFFD000)
   .option("amplitudeY", 2.5).speed(0.5f).build()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Configure an effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Configure an effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 val effect = Text.effect("wave", [0xFF4000, 0xFFD000])
     .option("amplitudeY", 2.5).speed(0.5);</code>
@@ -198,7 +198,7 @@ val effect = Text.effect("wave", [0xFF4000, 0xFFD000])
 <div class="av-example-group" data-example="owned-codes">
 <h2 id="start-recipe-owned-codes">Register a text code and remove it later</h2>
 <p>This registers a gold color and a wave effect under names your text can use. Choose IDs in your mod’s namespace and keep the returned registration objects. Call <code>close()</code> later when removing those entries, not immediately after setup. Groovy replaces its previous script registrations after a successful reload; CraftTweaker records the changes as startup actions.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Register a text code and remove it later — java"><code class="language-java">import net.minecraft.util.ResourceLocation;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Register a text code and remove it later — java"><code class="language-java">import net.minecraft.util.ResourceLocation;
 import net.phoenix.chromatic_codes.api.ChromaticDefinitions;
 
 var receipt = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT_NAME,
@@ -206,20 +206,20 @@ var receipt = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT_NAM
 // Later, when your contribution unloads:
 receipt.close();</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Register a text code and remove it later — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Register a text code and remove it later — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
 
 val receipt = effectCode(ResourceLocation("my_mod", "warm_wave"), "warm_wave", effect)
 
 // Later, when your contribution unloads:
 receipt.close()</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Register a text code and remove it later — groovy"><code class="language-groovy">// In the reloadable script loader; do not manually call lifecycle hooks:
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Register a text code and remove it later — groovy"><code class="language-groovy">// In the reloadable script loader; do not manually call lifecycle hooks:
 text.namedEffect('my_pack:warm_wave', 'warm_wave', effect)
 text.color('my_pack:gold', 'gold', 0xFFCC00)
 
 // Omitting these declarations from a successful reload removes this owner's entries.</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Register a text code and remove it later — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Register a text code and remove it later — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 val codes = definitions("my_mod") { text =&gt;
   text.effect("warm_wave", effect)
@@ -229,7 +229,7 @@ val codes = definitions("my_mod") { text =&gt;
 // Later, on contribution unload:
 codes.close()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect("my_pack:warm_wave", "warm_wave", effect);
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect("my_pack:warm_wave", "warm_wave", effect);
 Text.color("my_pack:gold", "gold", 0xFFCC00);
 
 // Explicitly remove only this facade's still-current contribution:

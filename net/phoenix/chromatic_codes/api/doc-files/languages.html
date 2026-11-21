@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -64,29 +64,29 @@ loadScripts(document, 'script');</script>
 <div class="av-example-group" data-example="effect-options">
 <h2 id="languages-recipe-effect-options">Configure an effect</h2>
 <p>This creates a wave effect with the supplied colors and vertical amplitude, then sets its playback speed independently. Each language produces the same effect. Creating it alone does not give text a code to use; register a name for it in the next example.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Configure an effect — java"><code class="language-java">import net.phoenix.chromatic_codes.api.MovementRegistry;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Configure an effect — java"><code class="language-java">import net.phoenix.chromatic_codes.api.MovementRegistry;
 
 var effect = MovementRegistry.create("wave", 1, 1,
     java.util.List.of(0xFF4000, 0xFFD000), 0.5f,
     java.util.Map.of("amplitudeY", 2.5));</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Configure an effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Configure an effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
 
 val effect = textEffect("wave", listOf(0xFF4000, 0xFFD000),
     playbackSpeed = 0.5f, options = mapOf("amplitudeY" to 2.5))</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Configure an effect — groovy"><code class="language-groovy">def text = mods.chromatic_codes.text
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Configure an effect — groovy"><code class="language-groovy">def text = mods.chromatic_codes.text
 def effect = text.effect('wave', [0xFF4000, 0xFFD000],
     1f, 1f, 0.5f, [amplitudeY: 2.5d])</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Configure an effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Configure an effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 val effect = net.phoenix.chromatic_codes.scaladsl.Chromatic.effect("wave",
     0xFF4000,
     0xFFD000)
   .option("amplitudeY", 2.5).speed(0.5f).build()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Configure an effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Configure an effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 val effect = Text.effect("wave", [0xFF4000, 0xFFD000])
     .option("amplitudeY", 2.5).speed(0.5);</code>
@@ -98,23 +98,23 @@ val effect = Text.effect("wave", [0xFF4000, 0xFFD000])
 <h2 id="languages-recipe-all-code-kinds">Choose how text refers to a color or effect</h2>
 <p>After choosing an effect, decide how text will refer to it: a character code, a name or a direct effect object.</p>
 <p>Choose a short character code such as <code>&amp;z</code>, a readable name such as <code>&amp;[gold]</code>, or an effect object used directly by your code. The examples register each kind. Character and named colors, effects, and outlines are separate entry categories.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — java"><code class="language-java">var color = ChromaticDefinitions.register(ChromaticDefinitions.Kind.COLOR_CHAR,
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — java"><code class="language-java">var color = ChromaticDefinitions.register(ChromaticDefinitions.Kind.COLOR_CHAR,
     new ResourceLocation("my_mod", "gold_char"), 'Z', 0xFFCC00, null);
 var direct = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT,
     new ResourceLocation("my_mod", "direct_wave"), null, null, effect);
 // Retain both receipts until unload.</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — kotlin"><code class="language-kotlin">val color = formattingCode(ChromaticDefinitions.Kind.COLOR_CHAR,
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — kotlin"><code class="language-kotlin">val color = formattingCode(ChromaticDefinitions.Kind.COLOR_CHAR,
     ResourceLocation("my_mod", "gold_char"), trigger = 'Z', rgb = 0xFFCC00)
 val direct = formattingCode(ChromaticDefinitions.Kind.EFFECT,
     ResourceLocation("my_mod", "direct_wave"), effect = effect)</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor('my_pack:gold_char', 'Z', 0xFFCC00)
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — groovy"><code class="language-groovy">text.characterColor('my_pack:gold_char', 'Z', 0xFFCC00)
 text.characterEffect('my_pack:wave_char', 'Y', effect)
 text.characterOutline('my_pack:outline_char', 'X')
 text.directEffect('my_pack:direct_wave', effect)</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions("my_mod") { text =&gt;
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — scala"><code class="language-scala">val codes = definitions("my_mod") { text =&gt;
   text.code(ChromaticDefinitions.Kind.COLOR_CHAR,
       "gold_char",
       Char.box('Z'),
@@ -122,7 +122,7 @@ text.directEffect('my_pack:direct_wave', effect)</code>
   text.code(ChromaticDefinitions.Kind.EFFECT, "direct_wave", null, callback = effect)
 }</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor("my_pack:gold_char", "Z", 0xFFCC00);
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Choose how text refers to a color or effect — zenscript"><code class="language-zenscript">Text.characterColor("my_pack:gold_char", "Z", 0xFFCC00);
 Text.characterEffect("my_pack:wave_char", "Y", effect);
 Text.characterOutline("my_pack:outline_char", "X");
 Text.directEffect("my_pack:direct_wave", effect);</code>
@@ -134,7 +134,7 @@ Text.directEffect("my_pack:direct_wave", effect);</code>
 <h2 id="languages-recipe-owned-codes">Register a text code and remove it later</h2>
 <p>Keep the registration handle so reload or teardown can remove only the entries your code installed.</p>
 <p>This registers a gold color and a wave effect under names your text can use. Choose IDs in your mod’s namespace and keep the returned registration objects. Call <code>close()</code> later when removing those entries, not immediately after setup. Groovy replaces its previous script registrations after a successful reload; CraftTweaker records the changes as startup actions.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Register a text code and remove it later — java"><code class="language-java">import net.minecraft.util.ResourceLocation;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Register a text code and remove it later — java"><code class="language-java">import net.minecraft.util.ResourceLocation;
 import net.phoenix.chromatic_codes.api.ChromaticDefinitions;
 
 var receipt = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT_NAME,
@@ -142,20 +142,20 @@ var receipt = ChromaticDefinitions.register(ChromaticDefinitions.Kind.EFFECT_NAM
 // Later, when your contribution unloads:
 receipt.close();</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Register a text code and remove it later — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Register a text code and remove it later — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
 
 val receipt = effectCode(ResourceLocation("my_mod", "warm_wave"), "warm_wave", effect)
 
 // Later, when your contribution unloads:
 receipt.close()</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Register a text code and remove it later — groovy"><code class="language-groovy">// In the reloadable script loader; do not manually call lifecycle hooks:
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Register a text code and remove it later — groovy"><code class="language-groovy">// In the reloadable script loader; do not manually call lifecycle hooks:
 text.namedEffect('my_pack:warm_wave', 'warm_wave', effect)
 text.color('my_pack:gold', 'gold', 0xFFCC00)
 
 // Omitting these declarations from a successful reload removes this owner's entries.</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Register a text code and remove it later — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Register a text code and remove it later — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 val codes = definitions("my_mod") { text =&gt;
   text.effect("warm_wave", effect)
@@ -165,7 +165,7 @@ val codes = definitions("my_mod") { text =&gt;
 // Later, on contribution unload:
 codes.close()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect("my_pack:warm_wave", "warm_wave", effect);
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Register a text code and remove it later — zenscript"><code class="language-zenscript">Text.namedEffect("my_pack:warm_wave", "warm_wave", effect);
 Text.color("my_pack:gold", "gold", 0xFFCC00);
 
 // Explicitly remove only this facade's still-current contribution:
@@ -178,7 +178,7 @@ Text.remove("my_pack:warm_wave");</code>
 <h2 id="languages-recipe-layout-metrics">Measure formatted text and fit it into a line</h2>
 <p>With the styles registered, measure the formatted text before placing it in a constrained area.</p>
 <p>The example measures formatted text, wraps it into lines, and trims it to a chosen width. Supply a function returning each character’s ordinary width in your font. The example’s constant width of six only demonstrates the calls; Minecraft’s usual font gives different letters different widths.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
 
 var layout = ChromaticText.compile("&amp;[gold]ABC");
 float width = layout.width(character -&gt; 6);
@@ -188,7 +188,7 @@ String wrapped = layout.wrap(12, character -&gt; 6);
 var first = layout.glyphs().getFirst();
 String visible = layout.plain();</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile("&amp;[gold]ABC")
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — kotlin"><code class="language-kotlin">val layout = ChromaticText.compile("&amp;[gold]ABC")
 
 val width = layout.width { 6 }
 
@@ -200,7 +200,7 @@ val first = layout.glyphs().first()
 
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile('&amp;[gold]ABC')
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — groovy"><code class="language-groovy">def layout = text.compile('&amp;[gold]ABC')
 
 def width = layout.width({ c -&gt; 6 } as java.util.function.ToIntFunction)
 
@@ -212,7 +212,7 @@ def first = layout.glyphs().getFirst()
 
 def visible = layout.plain()</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile("&amp;[gold]ABC")
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — scala"><code class="language-scala">val layout = net.phoenix.chromatic_codes.api.ChromaticText.compile("&amp;[gold]ABC")
 
 val width = layout.width(_ =&gt; 6)
 
@@ -224,7 +224,7 @@ val first = layout.glyphs().getFirst()
 
 val visible = layout.plain()</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile("&amp;[gold]ABC");
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Measure formatted text and fit it into a line — zenscript"><code class="language-zenscript">val layout = Text.compile("&amp;[gold]ABC");
 
 val width = layout.width(function(character) {
     return 6;
@@ -248,19 +248,19 @@ val visible = layout.plain();</code>
 <h2 id="languages-recipe-draw-native">Draw through Minecraft’s font renderer</h2>
 <p>Use those measurements when drawing the text in a client screen.</p>
 <p>Call from an actual screen’s client render callback. Kotlin, Groovy and Scala use the same Java renderer. ZenScript can provide styled strings to another mod’s exposed GUI renderer, such as Offscreen’s draw callback.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — java"><code class="language-java">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — java"><code class="language-java">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
     .drawString("&amp;[warm_wave]Hello", 12, 12, 0xFFFFFF);</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — kotlin"><code class="language-kotlin">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — kotlin"><code class="language-kotlin">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
     .drawString("&amp;[warm_wave]Hello", 12, 12, 0xFFFFFF)</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — groovy"><code class="language-groovy">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — groovy"><code class="language-groovy">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
     .drawString('&amp;[warm_wave]Hello', 12, 12, 0xFFFFFF)</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — scala"><code class="language-scala">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — scala"><code class="language-scala">net.minecraft.client.Minecraft.getMinecraft().fontRenderer
   .drawString("&amp;[warm_wave]Hello", 12, 12, 0xFFFFFF)</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — zenscript"><code class="language-zenscript">// Requires OffscreenCleanroom too; declare this in a client-side script.
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Draw through Minecraft’s font renderer — zenscript"><code class="language-zenscript">// Requires OffscreenCleanroom too; declare this in a client-side script.
 import mods.offscreencleanroom.Windows;
 
 val panel = Windows.screen("Styled text", 640, 480);
@@ -279,7 +279,7 @@ panel.on("draw", function(event) {
 <h2 id="languages-recipe-custom-callback">Write a function that colors text red</h2>
 <p>When the bundled effects do not cover your design, supply a callback for the behavior you need.</p>
 <p>This custom callback keeps position and size unchanged and supplies a fixed red foreground. Replace the sample expression with your own animation while retaining finite output.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Write a function that colors text red — java"><code class="language-java">import net.phoenix.chromatic_codes.api.IChromaticEffect;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Write a function that colors text red — java"><code class="language-java">import net.phoenix.chromatic_codes.api.IChromaticEffect;
 
 IChromaticEffect custom = new IChromaticEffect() {
     @Override public int getRenderColor(int original,
@@ -295,13 +295,13 @@ IChromaticEffect custom = new IChromaticEffect() {
     }
 };</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Write a function that colors text red — kotlin"><code class="language-kotlin">val custom = object : IChromaticEffect {
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Write a function that colors text red — kotlin"><code class="language-kotlin">val custom = object : IChromaticEffect {
     override fun getRenderColor(original: Int, x: Float, y: Float) = 0xFF0000
     override fun getXOffset(x: Float, y: Float) = 0f
     override fun getYOffset(x: Float, y: Float) = 0f
 }</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Write a function that colors text red — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.IChromaticEffect
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Write a function that colors text red — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.IChromaticEffect
 
 def custom = [
     getRenderColor: { int original, float x, float y -&gt; 0xFF0000 },
@@ -309,12 +309,12 @@ def custom = [
     getYOffset: { float x, float y -&gt; 0f }
 ] as IChromaticEffect</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Write a function that colors text red — scala"><code class="language-scala">val custom = new net.phoenix.chromatic_codes.api.IChromaticEffect:
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Write a function that colors text red — scala"><code class="language-scala">val custom = new net.phoenix.chromatic_codes.api.IChromaticEffect:
   override def getRenderColor(original: Int, x: Float, y: Float): Int = 0xFF0000
   override def getXOffset(x: Float, y: Float): Float = 0f
   override def getYOffset(x: Float, y: Float): Float = 0f</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Write a function that colors text red — zenscript"><code class="language-zenscript">val custom = Text.custom(function(channel, x, y, original, fallback, milliseconds) {
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Write a function that colors text red — zenscript"><code class="language-zenscript">val custom = Text.custom(function(channel, x, y, original, fallback, milliseconds) {
     if (channel == "color") return 16711680.0;
     return fallback;
 });
@@ -327,28 +327,28 @@ Text.namedEffect("my_pack:red", "red", custom);</code>
 <h2 id="languages-recipe-fixed-clock">Preview an animation at a fixed time</h2>
 <p>A fixed preview time makes an animated effect easier to inspect and compare.</p>
 <p>The example samples the animation at a chosen time, making screenshots or comparisons repeatable. The temporary clock setting applies only to the calling thread and is restored when the block returns or throws. Playback speed still multiplies the time seen by the effect.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — java"><code class="language-java">import net.phoenix.chromatic_codes.api.TextEffectClock;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — java"><code class="language-java">import net.phoenix.chromatic_codes.api.TextEffectClock;
 
 try (var sample = TextEffectClock.at(250.0)) {
     int rgb = effect.getRenderColor(0xFFFFFF, 10, 20);
 }</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — kotlin"><code class="language-kotlin">atEffectTime(250.0) {
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — kotlin"><code class="language-kotlin">atEffectTime(250.0) {
     val rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f)
 }</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.TextEffectClock
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.TextEffectClock
 
 def sample = TextEffectClock.at(250d)
 
 try { def rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f) }
 finally { sample.close() }</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — scala"><code class="language-scala">atTime(250.0) {
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — scala"><code class="language-scala">atTime(250.0) {
   val rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f)
 }</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — zenscript"><code class="language-zenscript">Text.atTime(250.0, function() {
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — zenscript"><code class="language-zenscript">Text.atTime(250.0, function() {
     val width = Text.compile("&amp;[warm_wave]ABC")
         .width(function(character) {
         return 6;
@@ -365,7 +365,7 @@ finally { sample.close() }</code>
 <p>Once the basic setup is in place, these helpers fit the same API into native language callbacks and result types.</p>
 <h3 id="scala-options">Choose Scala effect settings with named methods</h3>
 <p>Common effect settings have typed names as well as the flexible <code>option</code> method. Both paths create a new immutable description and run the same Java schema validation when you call <code>build()</code>. They do not change a registered effect in place.</p>
-<pre><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-wiki-recipe="code-35"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 // Before: effect("wave", 0xFFCC00).option("amplitudeY", 2.5).option("opacity", 0.7)
 val wave = effect("wave", 0xFFCC00).amplitudeY(2.5).opacity(0.7).primaryColor(0xFF8800)

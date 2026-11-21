@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -76,7 +76,7 @@ descriptors and installs the complete batch.</p>
 <p>This API keeps one configuration batch. Each successful apply replaces the previous batch;
 invalid input leaves it active. The named-case and inline-code flags are shared registry settings.
 Unrelated registrations remain, but a new entry can replace one with the same kind and exact trigger.
-Other settings, such as number formatting, can stay in your mod's existing configuration code.</p><h2 id="configuration-example">Install a gold code from your mod’s settings</h2><p>The example uses a fixed list where your config loader would supply its values. Call <code>initialize()</code> during your mod’s construction event after Chromatic Codes, and call <code>reload()</code> after rereading your file.</p><pre><code class="language-java">import java.util.List;
+Other settings, such as number formatting, can stay in your mod's existing configuration code.</p><h2 id="configuration-example">Install a gold code from your mod’s settings</h2><p>The example uses a fixed list where your config loader would supply its values. Call <code>initialize()</code> during your mod’s construction event after Chromatic Codes, and call <code>reload()</code> after rereading your file.</p><pre data-wiki-readable="true" data-wiki-recipe="code-0"><code class="language-java">import java.util.List;
 import net.phoenix.chromatic_codes.config.TextConfiguration;
 
 final class CopperToolsText {

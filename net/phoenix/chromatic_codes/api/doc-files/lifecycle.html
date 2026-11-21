@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -55,7 +55,7 @@ loadScripts(document, 'script');</script>
 </header>
 <div class="main-grid">
 <main role="main"><div class="av-guide" data-languages="java kotlin groovy scala zenscript"><nav class="av-breadcrumb" aria-label="Guide navigation"><a href="start.html">Getting started</a><a href="languages.html">Language examples</a></nav><h1 id="register-text-styles-and-read-formatted-text-heading">Register text styles and read formatted text</h1><p class="av-lead">Register a color name, an animated style, and an outline together, then remove those registrations when your mod no longer needs them. Separate examples add a new kind of animation, inspect styled characters, and reuse settings without changing the original values.</p><p>A formatting name such as <code>gold</code> tells the text parser which style to use. An effect type such as <code>example/spark</code> tells the library how to construct an effect from colors and settings. Registering one does not register the other. Keep the returned cleanup objects for both if your script adds both; close them when those registrations are no longer needed.</p><p>Java, Kotlin, GroovyScript and native Scala 3 call the same common Java API. CraftTweaker exposes registered ZenScript wrappers. Rendering remains client-only; parsing, authoring, inspection and registry edits do not require a font renderer or graphics context.</p><div class="av-example-group" data-example="chromatic-lifecycle-batches"><h2 id="chromatic-lifecycle-batches">Register related text styles and remove them together</h2><p>This registers related color, effect, and outline entries in one update. Call it during initialization or while handling one script reload at a time. Readers see the previous definitions until every new entry passes validation. If any entry fails, none of these registration changes apply.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Register related text styles and remove them together — java"><code class="language-java">import java.util.ArrayList;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Register related text styles and remove them together — java"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.util.ResourceLocation;
 import net.phoenix.chromatic_codes.api.ChromaticDefinitions;
@@ -85,7 +85,7 @@ final class DefinitionBatchRecipe {
 
     // Retain install()'s handle until your contribution unloads. If install throws, retain the old handle.
 }</code></pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Register related text styles and remove them together — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Register related text styles and remove them together — kotlin"><code class="language-kotlin">import net.minecraft.util.ResourceLocation
 import net.phoenix.chromatic_codes.api.*
 
 object DefinitionBatchRecipeK {
@@ -118,7 +118,7 @@ object DefinitionBatchRecipeK {
 
     // Keep the returned handle. Catch rejected installation at your reload boundary and retain the old one.
 }</code></pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Register related text styles and remove them together — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.EffectBuilder
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Register related text styles and remove them together — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.EffectBuilder
 
 // Common reloadable GroovyScript declaration. The loader publishes this complete draft after script loading.
 def text = mods.chromatic_codes.text
@@ -129,7 +129,7 @@ text.outline('example:edge', 'edge')
 
 // Teardown/replacement is loader-owned. A successful empty reload removes these exact bindings.
 // A rejected text operation retains the last valid contribution; it does not publish half the draft.</code></pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Register related text styles and remove them together — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Register related text styles and remove them together — scala"><code class="language-scala">import net.phoenix.chromatic_codes.scaladsl.Chromatic.*
 
 object DefinitionBatchRecipeS:
   // Common initialization. The Scala receiver stages calls through the real Java editor.
@@ -144,7 +144,7 @@ object DefinitionBatchRecipeS:
 
   // Retain the returned scope. Common teardown closes it later; rejected drafts preserve the old snapshot.
   def unload(owned: AutoCloseable): Unit = owned.close()</code></pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Register related text styles and remove them together — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Register related text styles and remove them together — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 import mods.chromaticcodes.DefinitionReceipt;
 
 // Common startup: all seven supported categories may be staged in this one draft.
@@ -180,7 +180,7 @@ function replace(previous as DefinitionReceipt) as DefinitionReceipt {
 // Closing the older receipt after replacement preserves the replacement.</code></pre>
 <p>Java and Kotlin use <code>ChromaticDefinitions.edit</code>; Scala’s <code>definitions</code> block calls the same editor. Either every change applies together or none applies, which is called an <em>atomic update</em>. Groovy applies its script’s registrations together after a valid reload. CraftTweaker’s <code>DefinitionBatch</code> supports all seven entry categories and <code>replace(previous)</code>. Keep each returned cleanup object until you want to remove those entries. Create a new draft for another commit.</p></div>
 <div class="av-example-group" data-example="chromatic-lifecycle-effects"><h2 id="chromatic-lifecycle-effects">Create your own text effect</h2><h3 id="custom-effect-functions">Choose the color and movement functions</h3><p>The example makes a <code>spark</code> effect whose functions choose a color and vertical offset. A callback is a function the library calls when it needs one of those values. It can be called while measuring text as well as while drawing it, so it must not assume that a Minecraft screen or graphics context is available.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Create your own text effect — java"><code class="language-java">import java.util.Map;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Create your own text effect — java"><code class="language-java">import java.util.Map;
 import net.phoenix.chromatic_codes.api.*;
 
 final class MovementRecipe {
@@ -217,7 +217,7 @@ final class MovementRecipe {
         if (owned != null) owned.close();
     }
 }</code></pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Create your own text effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Create your own text effect — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.*
 
 class MovementRecipeK {
     private var owned: MovementScope? = null
@@ -248,7 +248,7 @@ class MovementRecipeK {
     // Common teardown.
     fun close() { owned?.close() }
 }</code></pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Create your own text effect — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.EffectBuilder
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Create your own text effect — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.EffectBuilder
 import net.phoenix.chromatic_codes.api.EffectOptions
 import net.phoenix.chromatic_codes.api.TextEffectClock
 
@@ -268,7 +268,7 @@ movements.register('example/spark', { colorRate, motionRate, palette -&gt;
 def preset = { -&gt; EffectOptions.palette(0xFF6000, 0xFFFF00)
     .option('amplitudeY', 2.5d).create('wave', 1f, 1f, 0.5f) }
 // Loader-owned teardown removes only exact registrations. Old layouts become inert.</code></pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Create your own text effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.api.*
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Create your own text effect — scala"><code class="language-scala">import net.phoenix.chromatic_codes.api.*
 import net.phoenix.chromatic_codes.scaladsl.Chromatic.{customEffect, effectPalette}
 
 final class MovementRecipeS:
@@ -293,7 +293,7 @@ final class MovementRecipeS:
         0.5f)
   // Common teardown; a failed replacement leaves the old scope active.
   def close(): Unit = if owned != null then owned.close()</code></pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Create your own text effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Create your own text effect — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 // Common startup: ZenScript authors reusable effect instances, rather than palette-parameterized movement factories.
 val spark = Text.customEffect()
@@ -335,7 +335,7 @@ val owned = Text.batch().namedEffect("example:spark", "spark", spark)
 // Text.custom's original string-channel sampler remains available for existing scripts.</code></pre>
 <h3 id="custom-effect-construction">Let callers choose colors for your effect</h3><p>In the Java, Kotlin, Scala and Groovy examples, <code>replace()</code> registers <code>example/spark</code>. The library calls that constructor function with a palette and movement controls each time a caller asks for a new spark effect. Replacing the registration validates the new set first; if it fails, the previous set stays active. Keep the returned <code>MovementScope</code> until you want to remove that set. Closing an older scope cannot remove a newer replacement.</p><p>The callbacks can supply color, position offsets, opacity, size, and outline settings. <code>build()</code> fixes which functions the effect uses; changing variables captured by those functions can still change its behavior, so protect shared mutable data yourself. Java and Groovy can also register a function that constructs a new effect for a supplied palette and movement settings. That constructor function is called a <em>movement factory</em>. ZenScript builds reusable effect instances instead of registering arbitrary palette-dependent constructors.</p></div>
 <div class="av-example-group" data-example="chromatic-lifecycle-inspection"><h2 id="chromatic-lifecycle-inspection">Find the visible character and style at a text position</h2><p>Pass formatted text to this example to find which visible character and style correspond to a position in the original string. For example, formatting markers take up string positions but draw no character. The returned data can help with text selection or inspection without drawing anything.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — java"><code class="language-java">import net.phoenix.chromatic_codes.api.ChromaticText;
 import net.phoenix.chromatic_codes.api.TextInspection;
 
 final class GlyphInspectionRecipe {
@@ -354,7 +354,7 @@ final class GlyphInspectionRecipe {
         return view; // Safe to retain across definition reloads; request another snapshot for new definitions.
     }
 }</code></pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.ChromaticText
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — kotlin"><code class="language-kotlin">import net.phoenix.chromatic_codes.api.ChromaticText
 import net.phoenix.chromatic_codes.api.TextInspection
 
 object GlyphInspectionRecipeK {
@@ -371,7 +371,7 @@ object GlyphInspectionRecipeK {
         return view
     }
 }</code></pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.ChromaticText
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.ChromaticText
 import net.phoenix.chromatic_codes.api.TextInspection
 
 // Common CPU query. Immutable snapshots retain source spans, flags, colors, tokens, effects and segment boundaries.
@@ -386,7 +386,7 @@ def inspect = { String source -&gt;
     }
     view
 }</code></pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — scala"><code class="language-scala">import net.phoenix.chromatic_codes.api.{ChromaticText, TextInspection}
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — scala"><code class="language-scala">import net.phoenix.chromatic_codes.api.{ChromaticText, TextInspection}
 
 object GlyphInspectionRecipeS:
   // Common CPU query. A surrogate pair belongs to one logical glyph; combining sequences can contain several.
@@ -400,7 +400,7 @@ object GlyphInspectionRecipeS:
 
       val selected = view.sourceToGlyph(safeStart, true)
     view</code></pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Find the visible character and style at a text position — zenscript"><code class="language-zenscript">import mods.chromaticcodes.Text;
 
 // Common CPU query, safe without a client renderer.
 val view = Text.compile("§lA😀§rB");

@@ -15,9 +15,9 @@
 <script type="text/javascript" src="../../../../../script-files/chromatic.js"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-syntax.css">
 <script defer src="../../../../../script-files/prism-1.30.0.js"></script>
-<script defer src="../../../../../script-files/wiki-syntax.js"></script>
+<script defer src="../../../../../script-files/wiki-syntax.js?v=55fa2361aabe"></script>
 <link rel="stylesheet" href="../../../../../resource-files/wiki-recipes.css?v=830aa6aca6ac">
-<script defer src="../../../../../script-files/wiki-recipes.js?v=e343c168231c"></script>
+<script defer src="../../../../../script-files/wiki-recipes.js?v=7972fd1f690a"></script>
 </head>
 <body class="doc-file-page">
 <script type="text/javascript">const pathtoroot = "../../../../../";
@@ -260,7 +260,7 @@ and register its callbacks. The interface explains sampling, animation time and 
 <div class="av-example-group" data-example="custom-callback">
 <h2 id="effects-recipe-custom-callback">Write a function that colors text red</h2>
 <p>This custom callback keeps position and size unchanged and supplies a fixed red foreground. Replace the sample expression with your own animation while retaining finite output.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Write a function that colors text red — java"><code class="language-java">import net.phoenix.chromatic_codes.api.IChromaticEffect;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Write a function that colors text red — java"><code class="language-java">import net.phoenix.chromatic_codes.api.IChromaticEffect;
 
 IChromaticEffect custom = new IChromaticEffect() {
     @Override public int getRenderColor(int original,
@@ -276,13 +276,13 @@ IChromaticEffect custom = new IChromaticEffect() {
     }
 };</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Write a function that colors text red — kotlin"><code class="language-kotlin">val custom = object : IChromaticEffect {
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Write a function that colors text red — kotlin"><code class="language-kotlin">val custom = object : IChromaticEffect {
     override fun getRenderColor(original: Int, x: Float, y: Float) = 0xFF0000
     override fun getXOffset(x: Float, y: Float) = 0f
     override fun getYOffset(x: Float, y: Float) = 0f
 }</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Write a function that colors text red — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.IChromaticEffect
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Write a function that colors text red — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.IChromaticEffect
 
 def custom = [
     getRenderColor: { int original, float x, float y -&gt; 0xFF0000 },
@@ -290,12 +290,12 @@ def custom = [
     getYOffset: { float x, float y -&gt; 0f }
 ] as IChromaticEffect</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Write a function that colors text red — scala"><code class="language-scala">val custom = new net.phoenix.chromatic_codes.api.IChromaticEffect:
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Write a function that colors text red — scala"><code class="language-scala">val custom = new net.phoenix.chromatic_codes.api.IChromaticEffect:
   override def getRenderColor(original: Int, x: Float, y: Float): Int = 0xFF0000
   override def getXOffset(x: Float, y: Float): Float = 0f
   override def getYOffset(x: Float, y: Float): Float = 0f</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Write a function that colors text red — zenscript"><code class="language-zenscript">val custom = Text.custom(function(channel, x, y, original, fallback, milliseconds) {
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Write a function that colors text red — zenscript"><code class="language-zenscript">val custom = Text.custom(function(channel, x, y, original, fallback, milliseconds) {
     if (channel == "color") return 16711680.0;
     return fallback;
 });
@@ -306,28 +306,28 @@ Text.namedEffect("my_pack:red", "red", custom);</code>
 <div class="av-example-group" data-example="fixed-clock">
 <h2 id="effects-recipe-fixed-clock">Preview an animation at a fixed time</h2>
 <p>The example samples the animation at a chosen time, making screenshots or comparisons repeatable. The temporary clock setting applies only to the calling thread and is restored when the block returns or throws. Playback speed still multiplies the time seen by the effect.</p>
-<pre data-language="java" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — java"><code class="language-java">import net.phoenix.chromatic_codes.api.TextEffectClock;
+<pre data-wiki-readable="true" data-language="java" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — java"><code class="language-java">import net.phoenix.chromatic_codes.api.TextEffectClock;
 
 try (var sample = TextEffectClock.at(250.0)) {
     int rgb = effect.getRenderColor(0xFFFFFF, 10, 20);
 }</code>
 </pre>
-<pre data-language="kotlin" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — kotlin"><code class="language-kotlin">atEffectTime(250.0) {
+<pre data-wiki-readable="true" data-language="kotlin" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — kotlin"><code class="language-kotlin">atEffectTime(250.0) {
     val rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f)
 }</code>
 </pre>
-<pre data-language="groovy" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.TextEffectClock
+<pre data-wiki-readable="true" data-language="groovy" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — groovy"><code class="language-groovy">import net.phoenix.chromatic_codes.api.TextEffectClock
 
 def sample = TextEffectClock.at(250d)
 
 try { def rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f) }
 finally { sample.close() }</code>
 </pre>
-<pre data-language="scala" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — scala"><code class="language-scala">atTime(250.0) {
+<pre data-wiki-readable="true" data-language="scala" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — scala"><code class="language-scala">atTime(250.0) {
   val rgb = effect.getRenderColor(0xFFFFFF, 10f, 20f)
 }</code>
 </pre>
-<pre data-language="zenscript" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — zenscript"><code class="language-zenscript">Text.atTime(250.0, function() {
+<pre data-wiki-readable="true" data-language="zenscript" tabindex="0" role="region" aria-label="Preview an animation at a fixed time — zenscript"><code class="language-zenscript">Text.atTime(250.0, function() {
     val width = Text.compile("&amp;[warm_wave]ABC")
         .width(function(character) {
         return 6;
