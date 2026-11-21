@@ -1,0 +1,10 @@
+net.phoenix.chromatic_codes
+net.phoenix.chromatic_codes.api
+net.phoenix.chromatic_codes.api.effects
+net.phoenix.chromatic_codes.client
+net.phoenix.chromatic_codes.client.typeface
+net.phoenix.chromatic_codes.compat.crafttweaker
+net.phoenix.chromatic_codes.compat.groovy
+net.phoenix.chromatic_codes.config
+net.phoenix.chromatic_codes.mixin
+net.phoenix.chromatic_codes.platform

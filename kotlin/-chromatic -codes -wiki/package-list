@@ -1,0 +1,23 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:net.phoenix.chromatic_codes.api////PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/index.html
+$dokka.location:net.phoenix.chromatic_codes.api//atEffectTime/#kotlin.Double#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/at-effect-time.html
+$dokka.location:net.phoenix.chromatic_codes.api//colorCode/#net.minecraft.util.ResourceLocation#kotlin.String#kotlin.Int/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/color-code.html
+$dokka.location:net.phoenix.chromatic_codes.api//customEffect/#kotlin.Function1[net.phoenix.chromatic_codes.api.EffectBuilder,kotlin.Unit]/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/custom-effect.html
+$dokka.location:net.phoenix.chromatic_codes.api//effect/net.phoenix.chromatic_codes.api.EffectOptions#kotlin.String#kotlin.Float#kotlin.Float#kotlin.Float/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/effect.html
+$dokka.location:net.phoenix.chromatic_codes.api//effectCode/#net.minecraft.util.ResourceLocation#kotlin.String#net.phoenix.chromatic_codes.api.IChromaticEffect/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/effect-code.html
+$dokka.location:net.phoenix.chromatic_codes.api//effectPalette/#vararg(kotlin.Int)/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/effect-palette.html
+$dokka.location:net.phoenix.chromatic_codes.api//formattingCode/#net.phoenix.chromatic_codes.api.ChromaticDefinitions.Kind#net.minecraft.util.ResourceLocation#kotlin.Any?#kotlin.Int?#net.phoenix.chromatic_codes.api.IChromaticEffect?/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/formatting-code.html
+$dokka.location:net.phoenix.chromatic_codes.api//playback/net.phoenix.chromatic_codes.api.IChromaticEffect#kotlin.Double/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/playback.html
+$dokka.location:net.phoenix.chromatic_codes.api//textEffect/#kotlin.String#kotlin.collections.List[kotlin.Int]#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.collections.Map[kotlin.String,kotlin.Any]/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.api/text-effect.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap////PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/index.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap//defaultNamedTextColors/#/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/default-named-text-colors.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap//defaultNamedTextGradients/#/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/default-named-text-gradients.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap//defaultTextColors/#/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/default-text-colors.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap//defaultTextGradients/#/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/default-text-gradients.html
+$dokka.location:net.phoenix.chromatic_codes.bootstrap//initializeTextEffects/#/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.bootstrap/initialize-text-effects.html
+$dokka.location:net.phoenix.chromatic_codes.client.typeface////PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.client.typeface/index.html
+$dokka.location:net.phoenix.chromatic_codes.client.typeface//withTypeface/net.phoenix.chromatic_codes.api.TypefaceSelection#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/-chromatic -codes -wiki/net.phoenix.chromatic_codes.client.typeface/with-typeface.html
+net.phoenix.chromatic_codes.api
+net.phoenix.chromatic_codes.bootstrap
+net.phoenix.chromatic_codes.client.typeface
